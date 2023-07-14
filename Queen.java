@@ -26,7 +26,7 @@ public class Queen extends Piece {
 
                 getPossibleMoves().add(currentSquare);
 
-                // opponent piece
+                // if capture
                 if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
                     getCaptures().add(currentSquare);
 
