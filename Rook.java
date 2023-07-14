@@ -1,8 +1,19 @@
 import java.util.*;
 public class Rook extends Piece {
+
+    private boolean stationaryStatus; // used to check if castling is allowed
     
     Rook(double value, int[] square, int color) {
         super(value, square, color);
+        this.stationaryStatus = true;
+    }
+
+    protected boolean getStationaryStatus() {
+        return stationaryStatus;
+    }
+
+    void moveRook() {
+        stationaryStatus = false;
     }
 
     @Override
