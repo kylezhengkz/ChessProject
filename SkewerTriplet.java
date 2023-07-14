@@ -1,5 +1,3 @@
-import java.util.*;
-
 class SkewerTriplet {
     private Piece skewerThreat;
     private Piece myProtectedPiece;

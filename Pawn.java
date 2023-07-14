@@ -8,27 +8,39 @@ public class Pawn extends Piece {
     @Override
     protected void generateMoves(PositionNode positionNode, HashMap<int[], List<Piece>> controlledSquares) {
         Piece selectedPawn = positionNode.getMyPieces().get(getSquare());
-        int[][] possibleDirections = {
-            {0, 1}, {0, 2}, {-1, 2}, {-1, -2}, {2, 1}, {2, -1}, {-2, 1}, {-2, 1}
-        };
 
-        for (int[] deltaDirection : possibleDirections) {
-            int[] currentSquare = getSquare();
-            currentSquare[0] += deltaDirection[0];
-            currentSquare[1] += deltaDirection[1];
-
-            if (validSquare(currentSquare)) {
-                continue;
-            }
-
-            insertToList(selectedPawn, controlledSquares.get(currentSquare));
-
-            // opponent piece
-            if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
-                getCaptures().add(currentSquare);
-            }
-            
+        int directionMultiplier = 1;
+        if (getColor() == BLACK) {
+            directionMultiplier = -1;
         }
+
+        // single square
+        int[] currentSquare = getSquare();
+        currentSquare[1] += directionMultiplier;
+        if (validSquare(getSquare()) && (!positionNode.getMyPieces().containsKey(currentSquare) || !positionNode.getOpponentPieces().containsKey(currentSquare))) {
+            getPossibleMoves().add(currentSquare);
+        }
+
+        // check for captures
+        currentSquare = getSquare();
+        currentSquare[1] += directionMultiplier;
+        currentSquare[0] += directionMultiplier;
+        if (validSquare(getSquare()) && positionNode.getOpponentPieces().containsKey(currentSquare)) {
+
+        }
+
+
+        currentSquare[0] -= directionMultiplier;
+        if (positionNode.getMyPieces().containsKey(currentSquare) || positionNode.getOpponentPieces().containsKey(currentSquare)) {
+            getPossibleMoves().add(currentSquare);
+        }
+
+        // double move
+        currentSquare[1] += directionMultiplier;
+        if (positionNode.getMyPieces().containsKey(currentSquare) || positionNode.getOpponentPieces().containsKey(currentSquare)) {
+            getPossibleMoves().add(currentSquare);
+        }
+    
     }
     
 }
