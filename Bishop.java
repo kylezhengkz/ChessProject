@@ -1,10 +1,8 @@
 import java.util.*;
 public class Bishop extends Piece {
-
-    private HashSet<int[]> skewerSquares;
     
-    Bishop(double value, int[] square) {
-        super(value, square);
+    Bishop(double value, int[] square, int color) {
+        super(value, square, color);
     }
 
     @Override
@@ -21,20 +19,27 @@ public class Bishop extends Piece {
             while (validSquare(currentSquare)) {
                 insertToList(selectedBishop, controlledSquares.get(currentSquare));
                 
+                // own piece
                 if (positionNode.getMyPieces().containsKey(currentSquare)) {
                     break;
                 }
 
+                getPossibleMoves().add(currentSquare);
+
+                // opponent piece
                 if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
                     getCaptures().add(currentSquare);
 
-                    // check for skewers
+                    // check for pins/skewers
                     int[] checkSquare = new int[2];
-                    currentSquare[0] += deltaDirection[0];
-                    currentSquare[1] += deltaDirection[1];
-                    if (validSquare(currentSquare) && positionNode.getOpponentPieces().containsKey(currentSquare)) {
-                        Piece pinnedPiece = positionNode.getOpponentPieces().containsKey(currentSquare);
-                        Piece skeweredPiece = positionNode.getOpponentPieces().containsKey(currentSquare);
+                    checkSquare[0] = currentSquare[0];
+                    checkSquare[1] = currentSquare[1];
+                    checkSquare[0] += deltaDirection[0];
+                    checkSquare[1] += deltaDirection[1];
+                    if (validSquare(checkSquare) && positionNode.getOpponentPieces().containsKey(checkSquare)) {
+                        Piece skeweredPiece = positionNode.getOpponentPieces().get(checkSquare);
+                        SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedBishop, skeweredPiece, deltaDirection);
+                        positionNode.getOpponentPieces().get(currentSquare).getSkewerThreats().add(newSkewerThreat);
                     }
                     
                     break;
