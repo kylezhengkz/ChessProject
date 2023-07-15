@@ -1,8 +1,8 @@
 import java.util.*;
 public class Piece {
 
-    public static int WHITE = 1;
-    public static int BLACK = 2;
+    public static final int WHITE = 1;
+    public static final int BLACK = 2;
 
     private double value;
     private int[] square;
