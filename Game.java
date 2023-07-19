@@ -116,6 +116,7 @@ public class Game {
 
         // analysis
         for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
+            System.out.println(squarePos.getArray()[0] + ", " + squarePos.getArray()[1]);
             HashMap<ArrayWrapper, List<Piece>> controlledSquares = new HashMap<>();
             Piece piece = currentPosition.getMyPieces().get(squarePos);
             piece.generateMoves(currentPosition, controlledSquares);
@@ -154,9 +155,9 @@ public class Game {
             squareArr[0] = i;
             square = new ArrayWrapper(squareArr.clone());
             if (color == WHITE) {
-                myStartingPosition.put(square, new Pawn(1, square, BLACK));
-            } else {
                 opponentStartingPosition.put(square, new Pawn(1, square, BLACK));
+            } else {
+                myStartingPosition.put(square, new Pawn(1, square, BLACK));
             }
         }
 
