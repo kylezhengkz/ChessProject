@@ -31,7 +31,15 @@ public class Game {
     static private void printBoard() {
         int[] squareArr = new int[2];
         ArrayWrapper square = new ArrayWrapper(squareArr);
+
+        System.out.print("  ");
+        for (int i = 0; i < 15; i++) {
+            System.out.print(".");
+        }
+        System.out.println();
+
         for (int i = 8; i >= 1; i--) {
+            System.out.print((9 - i) + "|");
             for (int j = 1; j <= 8; j++) {
                 square.getArray()[1] = i;
                 square.getArray()[0] = j;
@@ -46,44 +54,73 @@ public class Game {
 
                 if (selectedPiece instanceof Pawn) {
                     if (selectedPiece.getColor() == WHITE) {
-                        System.out.print("P ");
+                        System.out.print("P");
                     } else {
-                        System.out.print("p ");
+                        System.out.print("p");
                     }
                 } else if (selectedPiece instanceof Bishop) {
                     if (selectedPiece.getColor() == WHITE) {
-                        System.out.print("B ");
+                        System.out.print("B");
                     } else {
-                        System.out.print("b ");
+                        System.out.print("b");
                     }
                 } else if (selectedPiece instanceof Knight) {
                     if (selectedPiece.getColor() == WHITE) {
-                        System.out.print("K ");
+                        System.out.print("K");
                     } else {
-                        System.out.print("k ");
+                        System.out.print("k");
                     }
                 } else if (selectedPiece instanceof Rook) {
                     if (selectedPiece.getColor() == WHITE) {
-                        System.out.print("R ");
+                        System.out.print("R");
                     } else {
-                        System.out.print("r ");
+                        System.out.print("r");
                     }
                 } else if (selectedPiece instanceof Queen) {
                     if (selectedPiece.getColor() == WHITE) {
-                        System.out.print("Q ");
+                        System.out.print("Q");
                     } else {
-                        System.out.print("q ");
+                        System.out.print("q");
                     }
                 } else if (selectedPiece instanceof King) {
                     if (selectedPiece.getColor() == WHITE) {
-                        System.out.print("A ");
+                        System.out.print("A");
                     } else {
-                        System.out.print("a ");
+                        System.out.print("a");
                     }
+                } else {
+                    System.out.print(" ");
                 }
+
+                if (j <= 7) {
+                    System.out.print("|");
+                }
+
             }
+            System.out.print("|");
             System.out.println();
         }
+
+        System.out.print("  ");
+        for (int i = 0; i < 15; i++) {
+            System.out.print(".");
+        }
+        System.out.println();
+
+        // print letters
+        System.out.print("  ");
+        for (int i = 65; i <= 72; i++) {
+            System.out.print((char) i + " ");
+        }
+        System.out.println();
+
+        // analysis
+        for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
+            HashMap<ArrayWrapper, List<Piece>> controlledSquares = new HashMap<>();
+            Piece piece = currentPosition.getMyPieces().get(squarePos);
+            piece.generateMoves(currentPosition, controlledSquares);
+        }
+        
     }
 
     private static void initStartingPosition(int color) {

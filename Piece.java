@@ -17,6 +17,42 @@ public class Piece {
         this.square = square;
     }
 
+    protected void initializePossibleMoves() {
+        possibleMoves = new HashSet<>();
+    }
+
+    protected void initializeCaptures() {
+        captures = new HashSet<>();
+    }
+
+    protected void initializeSkewerThreats() {
+        skewerThreats = new HashSet<>();
+    }
+
+    protected void addPossibleMove(ArrayWrapper square) {
+        if (possibleMoves == null) {
+            possibleMoves = new HashSet<>();
+        }
+        
+        possibleMoves.add(square);
+    }
+
+    protected void addCapture(ArrayWrapper square) {
+        if (captures == null) {
+            captures = new HashSet<>();
+        }
+
+        captures.add(square);
+    }
+
+    protected void addSkewerThreat(SkewerTriplet skewerTriplet) {
+        if (skewerTriplet == null) {
+            skewerThreats = new HashSet<>();
+        }
+        
+        skewerThreats.add(skewerTriplet);
+    }
+
     protected Double getValue() {
         return value;
     }
@@ -44,6 +80,10 @@ public class Piece {
     protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {}
 
     protected void insertToList(Piece element, List<Piece> pieceList) {
+        if (pieceList == null) {
+            pieceList = new ArrayList<>();
+        }
+
         int index = 0;
         for (Piece piece : pieceList) {
             if (element.getValue() < piece.getValue()) {

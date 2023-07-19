@@ -9,6 +9,14 @@ public class King extends Piece {
         stationaryStatus = true;
     }
 
+    protected void addCastle(ArrayWrapper square) {
+        if (possibleCastles == null) {
+            possibleCastles = new HashSet<>();
+        }
+
+        possibleCastles.add(square);
+    }
+
     protected boolean getStationaryStatus() {
         return stationaryStatus;
     }
@@ -39,11 +47,11 @@ public class King extends Piece {
                 continue;
             }
 
-            getPossibleMoves().add(currentSquare);
+            addPossibleMove(currentSquare);
 
             // if capture
             if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
-                getCaptures().add(currentSquare);
+                addCapture(currentSquare);
             }
 
         }
@@ -76,7 +84,7 @@ public class King extends Piece {
                 && !unsafeSquares.containsKey(checkSquare.getArray())) {
                     int[] castlePositionArr = {3, checkSquare.getArray()[1]};
                     ArrayWrapper castlePosition = new ArrayWrapper(castlePositionArr);
-                    possibleCastles.add(castlePosition);
+                    addCastle(castlePosition);
                 }
             }
         }
@@ -95,7 +103,7 @@ public class King extends Piece {
                 && !unsafeSquares.containsKey(checkSquare.getArray())) {
                     int[] castlePositionArr = {7, checkSquare.getArray()[1]};
                     ArrayWrapper castlePosition = new ArrayWrapper(castlePositionArr);
-                    possibleCastles.add(castlePosition);
+                    addCastle(castlePosition);
                 }
             }
         }

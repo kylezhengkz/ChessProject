@@ -27,11 +27,11 @@ public class Knight extends Piece {
                 continue;
             }
 
-            getPossibleMoves().add(currentSquare);
+            addPossibleMove(currentSquare);
 
             // if capture
             if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
-                getCaptures().add(currentSquare);
+                addCapture(currentSquare);
             }
 
         }

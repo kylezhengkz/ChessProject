@@ -24,11 +24,11 @@ public class Queen extends Piece {
                     break;
                 }
 
-                getPossibleMoves().add(currentSquare);
+                addPossibleMove(currentSquare);
 
                 // if capture
                 if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
-                    getCaptures().add(currentSquare);
+                    addCapture(currentSquare);
 
                     // check for pins/skewers
                     int[] checkSquareArr = new int[2];
@@ -40,7 +40,7 @@ public class Queen extends Piece {
                     if (validSquare(checkSquare) && positionNode.getOpponentPieces().containsKey(checkSquare)) {
                         Piece skeweredPiece = positionNode.getOpponentPieces().get(checkSquare);
                         SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedQueen, skeweredPiece, deltaDirection);
-                        positionNode.getOpponentPieces().get(currentSquare).getSkewerThreats().add(newSkewerThreat);
+                        positionNode.getOpponentPieces().get(currentSquare).addSkewerThreat(newSkewerThreat);
                     }
                     
                     break;

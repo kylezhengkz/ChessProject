@@ -43,14 +43,14 @@ public class Pawn extends Piece {
         ArrayWrapper checkSquare = getSquare();
         checkSquare.getArray()[1] += directionMultiplier;
         if (validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
-            getPossibleMoves().add(checkSquare);
+            addPossibleMove(checkSquare);
         }
 
         // double squares forward
         checkSquare = getSquare();
         checkSquare.getArray()[1] += 2*directionMultiplier;
         if (!getStationaryStatus() && validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
-            getPossibleMoves().add(checkSquare);
+            addPossibleMove(checkSquare);
         }
 
         // check for captures
@@ -60,8 +60,8 @@ public class Pawn extends Piece {
         if (validSquare(getSquare())) {
             insertToList(selectedPawn, controlledSquares.get(checkSquare));
             if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
-                getPossibleMoves().add(checkSquare);
-                getCaptures().add(checkSquare);
+                addPossibleMove(checkSquare);
+                addCapture(checkSquare);
             }
         }
 
@@ -71,8 +71,8 @@ public class Pawn extends Piece {
         if (validSquare(getSquare())) {
             insertToList(selectedPawn, controlledSquares.get(checkSquare));
             if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
-                getPossibleMoves().add(checkSquare);
-                getCaptures().add(checkSquare);
+                addPossibleMove(checkSquare);
+                addCapture(checkSquare);
             }
         }
 
@@ -82,8 +82,8 @@ public class Pawn extends Piece {
         if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
             Pawn opponentPawn = (Pawn) positionNode.getOpponentPieces().get(checkSquare);
             if (opponentPawn.pawnJustMovedTwoSquares) {
-                getPossibleMoves().add(checkSquare);
-                getCaptures().add(checkSquare);
+                addPossibleMove(checkSquare);
+                addCapture(checkSquare);
             }
         }
 
@@ -92,8 +92,8 @@ public class Pawn extends Piece {
         if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
             Pawn opponentPawn = (Pawn) positionNode.getOpponentPieces().get(checkSquare);
             if (opponentPawn.pawnJustMovedTwoSquares) {
-                getPossibleMoves().add(checkSquare);
-                getCaptures().add(checkSquare);
+                addPossibleMove(checkSquare);
+                addCapture(checkSquare);
             }
         }
     
