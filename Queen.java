@@ -1,21 +1,21 @@
 import java.util.*;
 public class Queen extends Piece {
     
-    Queen(double value, int[] square, int color) {
+    Queen(double value, ArrayWrapper square, int color) {
         super(value, square, color);
     }
 
     @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<int[], List<Piece>> controlledSquares) {
+    protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {
         Piece selectedQueen = positionNode.getMyPieces().get(getSquare());
         int[][] possibleDirections = {
             {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}
         };
 
         for (int[] deltaDirection : possibleDirections) {
-            int[] currentSquare = getSquare();
-            currentSquare[0] += deltaDirection[0];
-            currentSquare[1] += deltaDirection[1];
+            ArrayWrapper currentSquare = getSquare();
+            currentSquare.getArray()[0] += deltaDirection[0];
+            currentSquare.getArray()[1] += deltaDirection[1];
             while (validSquare(currentSquare)) {
                 insertToList(selectedQueen, controlledSquares.get(currentSquare));
                 
@@ -31,11 +31,12 @@ public class Queen extends Piece {
                     getCaptures().add(currentSquare);
 
                     // check for pins/skewers
-                    int[] checkSquare = new int[2];
-                    checkSquare[0] = currentSquare[0];
-                    checkSquare[1] = currentSquare[1];
-                    checkSquare[0] += deltaDirection[0];
-                    checkSquare[1] += deltaDirection[1];
+                    int[] checkSquareArr = new int[2];
+                    ArrayWrapper checkSquare = new ArrayWrapper(checkSquareArr);
+                    checkSquare.getArray()[0] = currentSquare.getArray()[0];
+                    checkSquare.getArray()[1] = currentSquare.getArray()[1];
+                    checkSquare.getArray()[0] += deltaDirection[0];
+                    checkSquare.getArray()[1] += deltaDirection[1];
                     if (validSquare(checkSquare) && positionNode.getOpponentPieces().containsKey(checkSquare)) {
                         Piece skeweredPiece = positionNode.getOpponentPieces().get(checkSquare);
                         SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedQueen, skeweredPiece, deltaDirection);

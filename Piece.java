@@ -5,13 +5,13 @@ public class Piece {
     public static final int BLACK = 2;
 
     private double value;
-    private int[] square;
+    private ArrayWrapper square;
     private int color;
-    private HashSet<int[]> possibleMoves;
-    private HashSet<int[]> captures; // subset of possibleMoves
+    private HashSet<ArrayWrapper> possibleMoves;
+    private HashSet<ArrayWrapper> captures; // subset of possibleMoves
     private HashSet<SkewerTriplet> skewerThreats;
 
-    Piece(double value, int[] square, int color) {
+    Piece(double value, ArrayWrapper square, int color) {
         this.color = color;
         this.value = value;
         this.square = square;
@@ -21,7 +21,7 @@ public class Piece {
         return value;
     }
 
-    protected int[] getSquare() {
+    protected ArrayWrapper getSquare() {
         return square;
     }
 
@@ -29,11 +29,11 @@ public class Piece {
         return color;
     }
 
-    protected HashSet<int[]> getPossibleMoves() {
+    protected HashSet<ArrayWrapper> getPossibleMoves() {
         return possibleMoves;
     }
 
-    protected HashSet<int[]> getCaptures() {
+    protected HashSet<ArrayWrapper> getCaptures() {
         return captures;
     }
 
@@ -41,7 +41,7 @@ public class Piece {
         return skewerThreats;
     }
 
-    protected void generateMoves(PositionNode positionNode, HashMap<int[], List<Piece>> controlledSquares) {}
+    protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {}
 
     protected void insertToList(Piece element, List<Piece> pieceList) {
         int index = 0;
@@ -54,15 +54,15 @@ public class Piece {
         pieceList.add(index, element);
     }
 
-    protected boolean validSquare(int[] square) {
-        return square[0] >= 1 && square[1] <= 64 && square[1] >= 1 && square[1] <= 64;
+    protected boolean validSquare(ArrayWrapper square) {
+        return square.getArray()[0] >= 1 && square.getArray()[1] <= 64 && square.getArray()[1] >= 1 && square.getArray()[1] <= 64;
     }
 
-    protected boolean isVertical(int[] direction) {
-        return (direction[0] == 1 && direction[1] == 0) || (direction[0] == -1 && direction[1] == 0);
+    protected boolean isVertical(ArrayWrapper direction) {
+        return (direction.getArray()[0] == 1 && direction.getArray()[1] == 0) || (direction.getArray()[0] == -1 && direction.getArray()[1] == 0);
     }
 
-    protected boolean isHorizontal(int[] direction) {
-        return (direction[0] == 0 && direction[1] == 1) || (direction[0] == 0 && direction[1] == -1);
+    protected boolean isHorizontal(ArrayWrapper direction) {
+        return (direction.getArray()[0] == 0 && direction.getArray()[1] == 1) || (direction.getArray()[0] == 0 && direction.getArray()[1] == -1);
     }
 }

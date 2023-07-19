@@ -29,11 +29,12 @@ public class Game {
     }
 
     static private void printBoard() {
-        int[] square = new int[2];
+        int[] squareArr = new int[2];
+        ArrayWrapper square = new ArrayWrapper(squareArr);
         for (int i = 8; i >= 1; i--) {
             for (int j = 1; j <= 8; j++) {
-                square[0] = i;
-                square[1] = j;
+                square.getArray()[1] = i;
+                square.getArray()[0] = j;
                 Piece selectedPiece = null;
                 if (currentPosition.getMyPieces().containsKey(square)) {
                     selectedPiece = currentPosition.getMyPieces().get(square);
@@ -77,7 +78,7 @@ public class Game {
                     if (selectedPiece.getColor() == WHITE) {
                         System.out.print("A ");
                     } else {
-                        System.out.print("a");
+                        System.out.print("a ");
                     }
                 }
             }
@@ -86,165 +87,200 @@ public class Game {
     }
 
     private static void initStartingPosition(int color) {
-        HashMap<int[], Piece> myStartingPosition = new HashMap<>();
-        HashMap<int[], Piece> opponentStartingPosition = new HashMap<>();
+        HashMap<ArrayWrapper, Piece> myStartingPosition = new HashMap<>();
+        HashMap<ArrayWrapper, Piece> opponentStartingPosition = new HashMap<>();
 
-        int[] square = new int[2];
+        int[] squareArr = new int[2];
+
+        ArrayWrapper square;
 
         // insert pawns
         if (color == WHITE) {
-            square[1] = 2;
+            squareArr[1] = 2;
         } else {
-            square[1] = 7;
+            squareArr[1] = 7;
         }
+
+        squareArr[1] = 2;
         for (int i = 1; i <= 8; i++) {
-            square[0] = i;
-            myStartingPosition.put(square.clone(), new Pawn(1, square, color));
+            squareArr[0] = i;
+            square = new ArrayWrapper(squareArr.clone());
+            if (color == WHITE) {
+                myStartingPosition.put(square, new Pawn(1, square, WHITE));
+            } else {
+                opponentStartingPosition.put(square, new Pawn(1, square, WHITE));
+            }
+        }
+
+        squareArr[1] = 7;
+        for (int i = 1; i <= 8; i++) {
+            squareArr[0] = i;
+            square = new ArrayWrapper(squareArr.clone());
+            if (color == WHITE) {
+                myStartingPosition.put(square, new Pawn(1, square, BLACK));
+            } else {
+                opponentStartingPosition.put(square, new Pawn(1, square, BLACK));
+            }
         }
 
         if (color == BLACK) {
-            square[1] = 7;
+            squareArr[1] = 7;
         } else {
-            square[1] = 2;
+            squareArr[1] = 2;
         }
         for (int i = 1; i <= 8; i++) {
-            square[0] = i;
-            opponentStartingPosition.put(square.clone(), new Pawn(1, square, color));
+            squareArr[0] = i;
+            square = new ArrayWrapper(squareArr.clone());
+            opponentStartingPosition.put(square, new Pawn(1, square, color));
         }
 
         // insert rooks
-        square[0] = 1;
-        square[1] = 1;
+        squareArr[0] = 1;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
             myStartingPosition.put(square, new Rook(5, square, WHITE));
-            System.out.println(myStartingPosition.containsKey(square));
-            myStartingPosition.put(square.clone(), new Rook(5, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Rook(5, square, WHITE));
+            opponentStartingPosition.put(square, new Rook(5, square, WHITE));
         }
 
-        square[0] = 8;
-        square[1] = 1;
+        squareArr[0] = 8;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new Rook(5, square, WHITE));
+            myStartingPosition.put(square, new Rook(5, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Rook(5, square, WHITE));
+            opponentStartingPosition.put(square, new Rook(5, square, WHITE));
         }
 
-        square[0] = 1;
-        square[1] = 8;
+        squareArr[0] = 1;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Rook(5, square, BLACK));
+            myStartingPosition.put(square, new Rook(5, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Rook(5, square, BLACK));
+            opponentStartingPosition.put(square, new Rook(5, square, BLACK));
         }
 
-        square[0] = 8;
-        square[1] = 8;
+        squareArr[0] = 8;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Rook(5, square, BLACK));
+            myStartingPosition.put(square, new Rook(5, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Rook(5, square, BLACK));
+            opponentStartingPosition.put(square, new Rook(5, square, BLACK));
         }
 
         // insert knights
-        square[0] = 2;
-        square[1] = 1;
+        squareArr[0] = 2;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new Knight(3, square, WHITE));
+            myStartingPosition.put(square, new Knight(3, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Knight(3, square, WHITE));
+            opponentStartingPosition.put(square, new Knight(3, square, WHITE));
         }
 
-        square[0] = 7;
-        square[1] = 1;
+        squareArr[0] = 7;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new Knight(3, square, WHITE));
+            myStartingPosition.put(square, new Knight(3, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Knight(3, square, WHITE));
+            opponentStartingPosition.put(square, new Knight(3, square, WHITE));
         }
 
-        square[0] = 2;
-        square[1] = 8;
+        squareArr[0] = 2;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Knight(3, square, BLACK));
+            myStartingPosition.put(square, new Knight(3, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Knight(3, square, BLACK));
+            opponentStartingPosition.put(square, new Knight(3, square, BLACK));
         }
 
-        square[0] = 7;
-        square[1] = 8;
+        squareArr[0] = 7;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Knight(3, square, BLACK));
+            myStartingPosition.put(square, new Knight(3, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Knight(3, square, BLACK));
+            opponentStartingPosition.put(square, new Knight(3, square, BLACK));
         }
 
         // insert bishops
-        square[0] = 3;
-        square[1] = 1;
+        squareArr[0] = 3;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new Bishop(3, square, WHITE));
+            myStartingPosition.put(square, new Bishop(3, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Bishop(3, square, WHITE));
+            opponentStartingPosition.put(square, new Bishop(3, square, WHITE));
         }
 
-        square[0] = 6;
-        square[1] = 1;
+        squareArr[0] = 6;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new Bishop(3, square, WHITE));
+            myStartingPosition.put(square, new Bishop(3, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Bishop(3, square, WHITE));
+            opponentStartingPosition.put(square, new Bishop(3, square, WHITE));
         }
 
-        square[0] = 3;
-        square[1] = 8;
+        squareArr[0] = 3;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Bishop(3, square, BLACK));
+            myStartingPosition.put(square, new Bishop(3, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Bishop(3, square, BLACK));
+            opponentStartingPosition.put(square, new Bishop(3, square, BLACK));
         }
 
-        square[0] = 6;
-        square[1] = 8;
+        squareArr[0] = 6;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Bishop(3, square, BLACK));
+            myStartingPosition.put(square, new Bishop(3, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Bishop(3, square, BLACK));
+            opponentStartingPosition.put(square, new Bishop(3, square, BLACK));
         }
 
         // insert queens
-        square[0] = 4;
-        square[1] = 1;
+        squareArr[0] = 4;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new Queen(9, square, WHITE));
+            myStartingPosition.put(square, new Queen(9, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new Queen(9, square, WHITE));
+            opponentStartingPosition.put(square, new Queen(9, square, WHITE));
         }
 
-        square[0] = 4;
-        square[1] = 8;
+        squareArr[0] = 4;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new Queen(9, square, BLACK));
+            myStartingPosition.put(square, new Queen(9, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new Queen(9, square, BLACK));
+            opponentStartingPosition.put(square, new Queen(9, square, BLACK));
         }
 
         // insert kings
-        square[0] = 5;
-        square[1] = 1;
+        squareArr[0] = 5;
+        squareArr[1] = 1;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == WHITE) {
-            myStartingPosition.put(square.clone(), new King(13, square, WHITE));
+            myStartingPosition.put(square, new King(13, square, WHITE));
         } else {
-            opponentStartingPosition.put(square.clone(), new King(13, square, WHITE));
+            opponentStartingPosition.put(square, new King(13, square, WHITE));
         }
 
-        square[0] = 5;
-        square[1] = 8;
+        squareArr[0] = 5;
+        squareArr[1] = 8;
+        square = new ArrayWrapper(squareArr.clone());
         if (color == BLACK) {
-            myStartingPosition.put(square.clone(), new King(13, square, BLACK));
+            myStartingPosition.put(square, new King(13, square, BLACK));
         } else {
-            opponentStartingPosition.put(square.clone(), new King(13, square, BLACK));
+            opponentStartingPosition.put(square, new King(13, square, BLACK));
         }
 
         currentPosition = new PositionNode(myStartingPosition, opponentStartingPosition);

@@ -4,7 +4,7 @@ public class Pawn extends Piece {
     private boolean stationaryStatus; // true if pawn has not moved yet
     private boolean pawnJustMovedTwoSquares; // true if pawn just moved two squares forward
 
-    Pawn(double value, int[] square, int color) {
+    Pawn(double value, ArrayWrapper square, int color) {
         super(value, square, color);
         stationaryStatus = true;
         pawnJustMovedTwoSquares = false;
@@ -31,7 +31,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<int[], List<Piece>> controlledSquares) {
+    protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {
         Piece selectedPawn = positionNode.getMyPieces().get(getSquare());
 
         int directionMultiplier = 1;
@@ -40,23 +40,23 @@ public class Pawn extends Piece {
         }
 
         // single square forward
-        int[] checkSquare = getSquare();
-        checkSquare[1] += directionMultiplier;
+        ArrayWrapper checkSquare = getSquare();
+        checkSquare.getArray()[1] += directionMultiplier;
         if (validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
             getPossibleMoves().add(checkSquare);
         }
 
         // double squares forward
         checkSquare = getSquare();
-        checkSquare[1] += 2*directionMultiplier;
+        checkSquare.getArray()[1] += 2*directionMultiplier;
         if (!getStationaryStatus() && validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
             getPossibleMoves().add(checkSquare);
         }
 
         // check for captures
         checkSquare = getSquare();
-        checkSquare[1] += directionMultiplier;
-        checkSquare[0] += directionMultiplier;
+        checkSquare.getArray()[1] += directionMultiplier;
+        checkSquare.getArray()[0] += directionMultiplier;
         if (validSquare(getSquare())) {
             insertToList(selectedPawn, controlledSquares.get(checkSquare));
             if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
@@ -66,8 +66,8 @@ public class Pawn extends Piece {
         }
 
         checkSquare = getSquare();
-        checkSquare[1] += directionMultiplier;
-        checkSquare[0] -= directionMultiplier;
+        checkSquare.getArray()[1] += directionMultiplier;
+        checkSquare.getArray()[0] -= directionMultiplier;
         if (validSquare(getSquare())) {
             insertToList(selectedPawn, controlledSquares.get(checkSquare));
             if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
@@ -78,7 +78,7 @@ public class Pawn extends Piece {
 
         // check for en passant
         checkSquare = getSquare();
-        checkSquare[0] += directionMultiplier;
+        checkSquare.getArray()[0] += directionMultiplier;
         if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
             Pawn opponentPawn = (Pawn) positionNode.getOpponentPieces().get(checkSquare);
             if (opponentPawn.pawnJustMovedTwoSquares) {
@@ -88,7 +88,7 @@ public class Pawn extends Piece {
         }
 
         checkSquare = getSquare();
-        checkSquare[0] -= directionMultiplier;
+        checkSquare.getArray()[0] -= directionMultiplier;
         if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
             Pawn opponentPawn = (Pawn) positionNode.getOpponentPieces().get(checkSquare);
             if (opponentPawn.pawnJustMovedTwoSquares) {
