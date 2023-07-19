@@ -33,7 +33,7 @@ public class King extends Piece {
         };
 
         for (int[] deltaDirection : possibleDirections) {
-            ArrayWrapper currentSquare = getSquare();
+            ArrayWrapper currentSquare = new ArrayWrapper(getSquare().getArray());
             currentSquare.getArray()[0] += deltaDirection[0];
             currentSquare.getArray()[1] += deltaDirection[1];
 

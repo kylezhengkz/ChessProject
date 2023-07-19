@@ -119,7 +119,15 @@ public class Game {
             System.out.println(squarePos.getArray()[0] + ", " + squarePos.getArray()[1]);
             HashMap<ArrayWrapper, List<Piece>> controlledSquares = new HashMap<>();
             Piece piece = currentPosition.getMyPieces().get(squarePos);
-            piece.generateMoves(currentPosition, controlledSquares);
+            if (piece instanceof Pawn) {
+                ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Knight) {
+                ((Knight) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Bishop) {
+                ((Bishop) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof King) {
+                ((King) piece).generateMoves(currentPosition, controlledSquares);
+            }
         }
         
     }

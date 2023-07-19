@@ -17,18 +17,6 @@ public class Piece {
         this.square = square;
     }
 
-    protected void initializePossibleMoves() {
-        possibleMoves = new HashSet<>();
-    }
-
-    protected void initializeCaptures() {
-        captures = new HashSet<>();
-    }
-
-    protected void initializeSkewerThreats() {
-        skewerThreats = new HashSet<>();
-    }
-
     protected void addPossibleMove(ArrayWrapper square) {
         if (possibleMoves == null) {
             possibleMoves = new HashSet<>();

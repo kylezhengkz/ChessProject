@@ -40,7 +40,7 @@ public class Pawn extends Piece {
         }
 
         // single square forward
-        ArrayWrapper checkSquare = getSquare();
+        ArrayWrapper checkSquare = new ArrayWrapper(getSquare().getArray());
         checkSquare.getArray()[1] += directionMultiplier;
         if (validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
             addPossibleMove(checkSquare);
