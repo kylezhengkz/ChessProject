@@ -114,27 +114,93 @@ public class Game {
         }
         System.out.println();
 
+        HashMap<ArrayWrapper, List<Piece>> controlledSquares = new HashMap<>();
         // analysis
         for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
-            System.out.println(squarePos.getArray()[0] + ", " + squarePos.getArray()[1]);
-            HashMap<ArrayWrapper, List<Piece>> controlledSquares = new HashMap<>();
             Piece piece = currentPosition.getMyPieces().get(squarePos);
             if (piece instanceof Pawn) {
                 ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
             } else if (piece instanceof Knight) {
                 ((Knight) piece).generateMoves(currentPosition, controlledSquares);
+            }  else if (piece instanceof King) {
+                ((King) piece).generateMoves(currentPosition, controlledSquares);
             } else if (piece instanceof Bishop) {
                 ((Bishop) piece).generateMoves(currentPosition, controlledSquares);
             } else if (piece instanceof Queen) {
                 ((Queen) piece).generateMoves(currentPosition, controlledSquares);
             } else if (piece instanceof Rook) {
                 ((Rook) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof King) {
-                ((King) piece).generateMoves(currentPosition, controlledSquares);
             }
         }
+
+        for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
+            Piece piece = currentPosition.getMyPieces().get(squarePos);
+            System.out.println(piece == null);
+        }
+
+        /* 
+        for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
+            System.out.println(squarePos.getArray()[0] + ", " + squarePos.getArray()[1]);
+            Piece piece = currentPosition.getMyPieces().get(squarePos);
+            System.out.println(piece.getClass().toString());
+            System.out.println("Possible Moves");
+            for (ArrayWrapper possibleSquare : piece.getPossibleMoves()) {
+                System.out.println(possibleSquare.getArray()[0] + ", " + possibleSquare.getArray()[1]);
+            }
+            System.out.println("Possible Captures");
+            for (ArrayWrapper captureSquare : piece.getCaptures()) {
+                System.out.println(captureSquare.getArray()[0] + ", " + captureSquare.getArray()[1]);
+            }
+            System.out.println("Skewer Threats");
+            for (SkewerTriplet skewerTriplet : piece.getSkewerThreats()) {
+                Piece skewerThreat = skewerTriplet.getSkewerThreat();
+                System.out.print("Threat: " + skewerThreat.getClass().toString() + ": ");
+                System.out.println(skewerThreat.getSquare().getArray()[0] + ", " + skewerThreat.getSquare().getArray()[1]);
+                Piece protection = skewerTriplet.getMyProtectedPiece();
+                System.out.print("Protection: " + protection.getClass().toString() + ": ");
+                System.out.println(protection.getSquare().getArray()[0] + ", " + protection.getSquare().getArray()[1]);
+            }    
+        }
+        */
         
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static void initStartingPosition(int color) {
         HashMap<ArrayWrapper, Piece> myStartingPosition = new HashMap<>();
