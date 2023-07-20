@@ -13,7 +13,7 @@ public class Bishop extends Piece {
         };
 
         for (int[] deltaDirection : possibleDirections) {
-            ArrayWrapper currentSquare = new ArrayWrapper(getSquare().getArray());
+            ArrayWrapper currentSquare = new ArrayWrapper(getSquare().getArray().clone());
             currentSquare.getArray()[0] += deltaDirection[0];
             currentSquare.getArray()[1] += deltaDirection[1];
             while (validSquare(currentSquare)) {

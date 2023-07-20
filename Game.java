@@ -120,29 +120,13 @@ public class Game {
             Piece piece = currentPosition.getMyPieces().get(squarePos);
             if (piece instanceof Pawn) {
                 ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Knight) {
-                ((Knight) piece).generateMoves(currentPosition, controlledSquares);
-            }  else if (piece instanceof King) {
-                ((King) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Bishop) {
-                ((Bishop) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Queen) {
-                ((Queen) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Rook) {
-                ((Rook) piece).generateMoves(currentPosition, controlledSquares);
             }
         }
 
         for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
             Piece piece = currentPosition.getMyPieces().get(squarePos);
-            System.out.println(piece == null);
-        }
-
-        /* 
-        for (ArrayWrapper squarePos : currentPosition.getMyPieces().keySet()) {
-            System.out.println(squarePos.getArray()[0] + ", " + squarePos.getArray()[1]);
-            Piece piece = currentPosition.getMyPieces().get(squarePos);
-            System.out.println(piece.getClass().toString());
+            System.out.print(piece.getClass().toString() + ": ");
+            System.out.println(piece.getSquare().getArray()[0] + ", " + piece.getSquare().getArray()[1]);
             System.out.println("Possible Moves");
             for (ArrayWrapper possibleSquare : piece.getPossibleMoves()) {
                 System.out.println(possibleSquare.getArray()[0] + ", " + possibleSquare.getArray()[1]);
@@ -161,7 +145,6 @@ public class Game {
                 System.out.println(protection.getSquare().getArray()[0] + ", " + protection.getSquare().getArray()[1]);
             }    
         }
-        */
         
     }
 

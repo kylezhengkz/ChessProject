@@ -32,6 +32,9 @@ public class Pawn extends Piece {
 
     @Override
     protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {
+
+        System.out.println(getSquare().getArray()[0] + ", " + getSquare().getArray()[1]);
+
         Piece selectedPawn = positionNode.getMyPieces().get(getSquare());
 
         int directionMultiplier = 1;
@@ -40,21 +43,21 @@ public class Pawn extends Piece {
         }
 
         // single square forward
-        ArrayWrapper checkSquare = new ArrayWrapper(getSquare().getArray());
+        ArrayWrapper checkSquare = new ArrayWrapper(getSquare().getArray().clone());
         checkSquare.getArray()[1] += directionMultiplier;
         if (validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
             addPossibleMove(checkSquare);
         }
 
         // double squares forward
-        checkSquare = getSquare();
+        checkSquare.setArray(getSquare().getArray().clone());
         checkSquare.getArray()[1] += 2*directionMultiplier;
         if (!getStationaryStatus() && validSquare(getSquare()) && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
             addPossibleMove(checkSquare);
         }
 
         // check for captures
-        checkSquare = getSquare();
+        checkSquare.setArray(getSquare().getArray().clone());
         checkSquare.getArray()[1] += directionMultiplier;
         checkSquare.getArray()[0] += directionMultiplier;
         if (validSquare(getSquare())) {
@@ -65,7 +68,7 @@ public class Pawn extends Piece {
             }
         }
 
-        checkSquare = getSquare();
+        checkSquare.setArray(getSquare().getArray().clone());
         checkSquare.getArray()[1] += directionMultiplier;
         checkSquare.getArray()[0] -= directionMultiplier;
         if (validSquare(getSquare())) {
@@ -77,7 +80,7 @@ public class Pawn extends Piece {
         }
 
         // check for en passant
-        checkSquare = getSquare();
+        checkSquare.setArray(getSquare().getArray().clone());
         checkSquare.getArray()[0] += directionMultiplier;
         if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
             Pawn opponentPawn = (Pawn) positionNode.getOpponentPieces().get(checkSquare);
@@ -87,7 +90,7 @@ public class Pawn extends Piece {
             }
         }
 
-        checkSquare = getSquare();
+        checkSquare.setArray(getSquare().getArray().clone());
         checkSquare.getArray()[0] -= directionMultiplier;
         if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
             Pawn opponentPawn = (Pawn) positionNode.getOpponentPieces().get(checkSquare);

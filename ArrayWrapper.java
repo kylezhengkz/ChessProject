@@ -11,6 +11,10 @@ class ArrayWrapper {
         return array;
     }
 
+    protected void setArray(int[] array) {
+        this.array = array;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
