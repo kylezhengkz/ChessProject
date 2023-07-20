@@ -1,19 +1,19 @@
 import java.util.*;
 public class PositionNode {
-    private HashMap<ArrayWrapper, Piece> myPieces;
-    private HashMap<ArrayWrapper, Piece> opponentPieces;
+    private HashMap<Integer, Piece> myPieces;
+    private HashMap<Integer, Piece> opponentPieces;
     private List<PositionNode> children;
 
-    PositionNode(HashMap<ArrayWrapper, Piece> myPieces, HashMap<ArrayWrapper, Piece> opponentPieces) {
+    PositionNode(HashMap<Integer, Piece> myPieces, HashMap<Integer, Piece> opponentPieces) {
         this.myPieces = myPieces;
         this.opponentPieces = opponentPieces;
     }
 
-    public HashMap<ArrayWrapper, Piece> getMyPieces() {
+    public HashMap<Integer, Piece> getMyPieces() {
         return myPieces;
     }
 
-    public HashMap<ArrayWrapper, Piece> getOpponentPieces() {
+    public HashMap<Integer, Piece> getOpponentPieces() {
         return opponentPieces;
     }
 

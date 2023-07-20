@@ -3,7 +3,7 @@ public class Rook extends Piece {
 
     private boolean stationaryStatus; // used to check if castling is allowed
     
-    Rook(double value, ArrayWrapper square, int color) {
+    Rook(double value, int square, int color) {
         super(value, square, color);
         this.stationaryStatus = true;
     }
@@ -17,18 +17,15 @@ public class Rook extends Piece {
     }
 
     @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {
+    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
         Piece selectedRook = positionNode.getMyPieces().get(getSquare());
-        int[][] possibleDirections = {
-            {0, 1}, {0, -1}, {1, 0}, {-1, 0}
-        };
+        int[] directions = {UP, LEFT, DOWN, RIGHT};
 
-        for (int[] deltaDirection : possibleDirections) {
-            ArrayWrapper currentSquare = new ArrayWrapper(getSquare().getArray().clone());
-            currentSquare.getArray()[0] += deltaDirection[0];
-            currentSquare.getArray()[1] += deltaDirection[1];
+        for (int delta : directions) {
+            int currentSquare = selectedRook.getSquare();
+            while (validMove(currentSquare, delta)) {
+                currentSquare += delta;
 
-            while (validSquare(currentSquare)) {
                 insertToList(selectedRook, controlledSquares.get(currentSquare));
                 
                 // own piece
@@ -42,24 +39,20 @@ public class Rook extends Piece {
                 if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
                     addCapture(currentSquare);
 
+                    int checkSquare = 0;
                     // check for pins/skewers
-                    int[] checkSquareArr = new int[2];
-                    ArrayWrapper checkSquare = new ArrayWrapper(checkSquareArr);
-                    checkSquare.getArray()[0] = currentSquare.getArray()[0];
-                    checkSquare.getArray()[1] = currentSquare.getArray()[1];
-                    checkSquare.getArray()[0] += deltaDirection[0];
-                    checkSquare.getArray()[1] += deltaDirection[1];
-                    if (validSquare(checkSquare) && positionNode.getOpponentPieces().containsKey(checkSquare)) {
-                        Piece skeweredPiece = positionNode.getOpponentPieces().get(checkSquare);
-                        SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedRook, skeweredPiece, deltaDirection);
-                        positionNode.getOpponentPieces().get(currentSquare).addSkewerThreat(newSkewerThreat);
+                    if (validMove(currentSquare, delta)) {
+                        checkSquare = currentSquare + delta;
+                        if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
+                            Piece skeweredPiece = positionNode.getOpponentPieces().get(checkSquare);
+                            SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedRook, skeweredPiece, delta);
+                            positionNode.getOpponentPieces().get(currentSquare).addSkewerThreat(newSkewerThreat);
+                        }
                     }
                     
                     break;
                 }
 
-                currentSquare.getArray()[0] += deltaDirection[0];
-                currentSquare.getArray()[1] += deltaDirection[1];
             }
         }
     }

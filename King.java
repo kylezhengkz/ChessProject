@@ -2,14 +2,14 @@ import java.util.*;
 public class King extends Piece {
 
     private boolean stationaryStatus; // used to check if castling is allowed
-    private HashSet<ArrayWrapper> possibleCastles;
+    private HashSet<Integer> possibleCastles;
 
-    King(double value, ArrayWrapper square, int color) {
+    King(double value, int square, int color) {
         super(value, square, color);
         stationaryStatus = true;
     }
 
-    protected void addCastle(ArrayWrapper square) {
+    protected void addCastle(int square) {
         if (possibleCastles == null) {
             possibleCastles = new HashSet<>();
         }
@@ -26,88 +26,88 @@ public class King extends Piece {
     }
 
     @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<ArrayWrapper, List<Piece>> controlledSquares) {
+    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
         Piece selectedKing = positionNode.getMyPieces().get(getSquare());
-        int[][] possibleDirections = {
-            {1, 2}, {1, -2}, {-1, 2}, {-1, -2}, {2, 1}, {2, -1}, {-2, 1}, {-2, 1}
-        };
+        int[] directions = {UP, LEFT, DOWN, RIGHT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
 
-        for (int[] deltaDirection : possibleDirections) {
-            ArrayWrapper currentSquare = new ArrayWrapper(getSquare().getArray().clone());
-            currentSquare.getArray()[0] += deltaDirection[0];
-            currentSquare.getArray()[1] += deltaDirection[1];
-
-            if (!validSquare(currentSquare)) {
-                continue;
-            }
-            
-            insertToList(selectedKing, controlledSquares.get(currentSquare));
-
-            if (positionNode.getMyPieces().containsKey(currentSquare)) {
+        for (int delta : directions) {
+            if (!validMove(getSquare(), delta)) {
                 continue;
             }
 
-            addPossibleMove(currentSquare);
+            int newSquare = getSquare() + delta;
+            insertToList(selectedKing, controlledSquares.get(newSquare));
+
+            if (positionNode.getMyPieces().containsKey(newSquare)) {
+                continue;
+            }
+
+            addPossibleMove(newSquare);
 
             // if capture
-            if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
-                addCapture(currentSquare);
+            if (positionNode.getOpponentPieces().containsKey(newSquare)) {
+                addCapture(newSquare);
             }
 
         }
     }
 
-    protected void checkCastle(PositionNode positionNode, HashMap<int[], List<Piece>> unsafeSquares) {
+    protected void checkCastle(PositionNode positionNode, HashMap<Integer, List<Piece>> unsafeSquares) {
         if (!getStationaryStatus()) {
             return;
         }
 
-        int[] checkSquareArr = new int[2];
-        ArrayWrapper checkSquare = new ArrayWrapper(checkSquareArr);
-        if (getColor() == BLACK) {
-            checkSquare.getArray()[1] = 8;
+        int checkSquare = 0;
+
+        // check left side
+        if (getColor() == WHITE) {
+            checkSquare = 1;
         } else {
-            checkSquare.getArray()[1] = 1;
+            checkSquare = 8;
         }
 
-        // check if rook exists and satisfies the conditions to castle
-        checkSquare.getArray()[0] = 1;
+        boolean castleStatus = true;
         if (positionNode.getMyPieces().containsKey(checkSquare) 
         && positionNode.getMyPieces().get(checkSquare) instanceof Rook
-        && ((Rook) positionNode.getMyPieces().get(checkSquare)).getStationaryStatus()
-        && !unsafeSquares.containsKey(checkSquare.getArray())) {
+        && ((Rook) positionNode.getMyPieces().get(checkSquare)).getStationaryStatus()) {
             // check for pieces in the way or unsafe squares
-            for (int i = 2; i <= 4; i++) {
-                checkSquare.getArray()[0] = i;
-                if (!positionNode.getMyPieces().containsKey(checkSquare) 
-                && !positionNode.getOpponentPieces().containsKey(checkSquare)
-                && !unsafeSquares.containsKey(checkSquare.getArray())) {
-                    int[] castlePositionArr = {3, checkSquare.getArray()[1]};
-                    ArrayWrapper castlePosition = new ArrayWrapper(castlePositionArr);
-                    addCastle(castlePosition);
+            for (int i = checkSquare; i <= checkSquare + 32; i += 8) {
+                if (positionNode.getMyPieces().containsKey(i)
+                && positionNode.getOpponentPieces().containsKey(i)
+                && unsafeSquares.containsKey(i)) {
+                    castleStatus = false;
                 }
             }
         }
 
-        // check if rook exists and satisfies the conditions to castle
-        checkSquare.getArray()[0] = 8;
+        if (castleStatus) {
+            addCastle(getSquare() - 16);
+        }
+        
+        // check right side
+        if (getColor() == WHITE) {
+            checkSquare = 64;
+        } else {
+            checkSquare = 57;
+        }
+
+        castleStatus = true;
         if (positionNode.getMyPieces().containsKey(checkSquare) 
         && positionNode.getMyPieces().get(checkSquare) instanceof Rook
-        && ((Rook) positionNode.getMyPieces().get(checkSquare)).getStationaryStatus()
-        && !unsafeSquares.containsKey(checkSquare.getArray())) {
+        && ((Rook) positionNode.getMyPieces().get(checkSquare)).getStationaryStatus()) {
             // check for pieces in the way or unsafe squares
-            for (int i = 6; i <= 7; i++) {
-                checkSquare.getArray()[0] = i;
-                if (!positionNode.getMyPieces().containsKey(checkSquare) 
-                && !positionNode.getOpponentPieces().containsKey(checkSquare)
-                && !unsafeSquares.containsKey(checkSquare.getArray())) {
-                    int[] castlePositionArr = {7, checkSquare.getArray()[1]};
-                    ArrayWrapper castlePosition = new ArrayWrapper(castlePositionArr);
-                    addCastle(castlePosition);
+            for (int i = checkSquare; i >= checkSquare - 16; i -= 8) {
+                if (positionNode.getMyPieces().containsKey(i)
+                && positionNode.getOpponentPieces().containsKey(i)
+                && unsafeSquares.containsKey(i)) {
+                    castleStatus = false;
                 }
             }
         }
 
+        if (castleStatus) {
+            addCastle(getSquare() + 16);
+        }
     }
 
 }
