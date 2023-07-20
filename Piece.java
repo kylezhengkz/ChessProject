@@ -83,7 +83,7 @@ public class Piece {
     }
 
     protected boolean validSquare(ArrayWrapper square) {
-        return square.getArray()[0] >= 1 && square.getArray()[1] <= 64 && square.getArray()[1] >= 1 && square.getArray()[1] <= 64;
+        return square.getArray()[0] >= 1 && square.getArray()[0] <= 64 && square.getArray()[1] >= 1 && square.getArray()[1] <= 64;
     }
 
     protected boolean isVertical(ArrayWrapper direction) {

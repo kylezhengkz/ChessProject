@@ -125,6 +125,10 @@ public class Game {
                 ((Knight) piece).generateMoves(currentPosition, controlledSquares);
             } else if (piece instanceof Bishop) {
                 ((Bishop) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Queen) {
+                ((Queen) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Rook) {
+                ((Rook) piece).generateMoves(currentPosition, controlledSquares);
             } else if (piece instanceof King) {
                 ((King) piece).generateMoves(currentPosition, controlledSquares);
             }

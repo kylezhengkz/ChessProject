@@ -27,6 +27,7 @@ public class Rook extends Piece {
             ArrayWrapper currentSquare = new ArrayWrapper(getSquare().getArray());
             currentSquare.getArray()[0] += deltaDirection[0];
             currentSquare.getArray()[1] += deltaDirection[1];
+
             while (validSquare(currentSquare)) {
                 insertToList(selectedRook, controlledSquares.get(currentSquare));
                 
@@ -56,6 +57,9 @@ public class Rook extends Piece {
                     
                     break;
                 }
+
+                currentSquare.getArray()[0] += deltaDirection[0];
+                currentSquare.getArray()[1] += deltaDirection[1];
             }
         }
     }

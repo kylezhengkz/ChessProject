@@ -45,6 +45,10 @@ public class Queen extends Piece {
                     
                     break;
                 }
+
+                currentSquare.getArray()[0] += deltaDirection[0];
+                currentSquare.getArray()[1] += deltaDirection[1];
+
             }
         }
     }
