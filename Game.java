@@ -158,43 +158,6 @@ public class Game {
         
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static String integerSquareToSquareName(int square) {
         int row = square % 8;
         if (row == 0) {
