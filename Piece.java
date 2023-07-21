@@ -54,7 +54,7 @@ public class Piece {
     }
 
     protected void addSkewerThreat(SkewerTriplet skewerTriplet) {
-        if (skewerTriplet == null) {
+        if (skewerThreats == null) {
             skewerThreats = new HashSet<>();
         }
         
@@ -116,13 +116,13 @@ public class Piece {
                 return true;
             }
         } else if (initialSquare % 8 == 1) {
-            if (delta == DOWN || delta == DOWN_LEFT || delta == DOWN_LEFT) {
+            if (delta == DOWN || delta == DOWN_LEFT || delta == DOWN_RIGHT) {
                 return false;
             } else {
                 return true;
             }
         } else if (initialSquare % 8 == 0) {
-            if (delta == UP || delta == UP_LEFT || delta == UP_LEFT) {
+            if (delta == UP || delta == UP_LEFT || delta == UP_RIGHT) {
                 return false;
             } else {
                 return true;

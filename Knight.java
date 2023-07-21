@@ -12,6 +12,8 @@ public class Knight extends Piece {
 
         for (int delta : possibleDirections) {
             if (!validKnightMove(getSquare(), delta)) {
+                System.out.print("AHHHHHH: " + (getSquare() + delta) + ": ");
+                System.out.println(Game.integerSquareToSquareName(getSquare() + delta));
                 continue;
             }
 

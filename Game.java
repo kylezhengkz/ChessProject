@@ -8,22 +8,6 @@ public class Game {
     public static PositionNode currentPosition;
 
     public static void main(String[] args) {
-        System.out.println(integerSquareToSquareName(1));
-        System.out.println(integerSquareToSquareName(2));
-        System.out.println(integerSquareToSquareName(3));
-        System.out.println(integerSquareToSquareName(4));
-        System.out.println(integerSquareToSquareName(5));
-        System.out.println(integerSquareToSquareName(6));
-        System.out.println(integerSquareToSquareName(7));
-        System.out.println(integerSquareToSquareName(8));
-        System.out.println(integerSquareToSquareName(57));
-        System.out.println(integerSquareToSquareName(58));
-        System.out.println(integerSquareToSquareName(59));
-        System.out.println(integerSquareToSquareName(60));
-        System.out.println(integerSquareToSquareName(61));
-        System.out.println(integerSquareToSquareName(62));
-        System.out.println(integerSquareToSquareName(63));
-        System.out.println(integerSquareToSquareName(64));
         Scanner sc = new Scanner(System.in);
 
         String input;
@@ -124,12 +108,22 @@ public class Game {
         }
         System.out.println();
 
-        HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
         // analysis
+        HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
         for (int squarePos : currentPosition.getMyPieces().keySet()) {
             Piece piece = currentPosition.getMyPieces().get(squarePos);
             if (piece instanceof Pawn) {
                 ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Knight) {
+                ((Knight) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Pawn) {
+                ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Bishop) {
+                ((Bishop) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof Queen) {
+                ((Queen) piece).generateMoves(currentPosition, controlledSquares);
+            } else if (piece instanceof King) {
+                ((King) piece).generateMoves(currentPosition, controlledSquares);
             }
         }
 
@@ -201,7 +195,7 @@ public class Game {
 
 
 
-    private static String integerSquareToSquareName(int square) {
+    public static String integerSquareToSquareName(int square) {
         int row = square % 8;
         if (row == 0) {
             row = 8;

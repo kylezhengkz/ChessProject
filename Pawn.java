@@ -53,7 +53,7 @@ public class Pawn extends Piece {
         // double squares forward
         if (validMove(getSquare(), 2*UP*directionMultiplier)) {
             checkSquare = getSquare() + 2*UP*directionMultiplier;
-            if (!getStationaryStatus() && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
+            if (getStationaryStatus() && !positionNode.getMyPieces().containsKey(checkSquare) && !positionNode.getOpponentPieces().containsKey(checkSquare)) {
                 addPossibleMove(checkSquare);
             }
         }
