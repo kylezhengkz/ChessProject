@@ -28,6 +28,23 @@ public class Game {
         printBoard();
     }
 
+    public static String integerSquareToSquareName(int square) {
+        int row = square % 8;
+        if (row == 0) {
+            row = 8;
+        }
+        
+        int col = 0;
+        if (square % 8 == 0) {
+            col = square / 8 - 1;
+        } else {
+            col = square / 8;
+        }
+
+        char colName = (char) ('a' + col);
+        return colName + Integer.toString(row);
+    }
+
     private static void printBoard() {
         System.out.print("  ");
         for (int i = 0; i < 15; i++) {
@@ -39,12 +56,12 @@ public class Game {
             System.out.print(i + "|");
             for (int square = i; square <= i + 56; square += 8) {
                 Piece selectedPiece = null;
-                if (currentPosition.getMyPieces().containsKey(square)) {
-                    selectedPiece = currentPosition.getMyPieces().get(square);
+                if (currentPosition.getUserPieces().containsKey(square)) {
+                    selectedPiece = currentPosition.getUserPieces().get(square);
                 }
 
-                if (currentPosition.getOpponentPieces().containsKey(square)) {
-                    selectedPiece = currentPosition.getOpponentPieces().get(square);
+                if (currentPosition.getCpuPieces().containsKey(square)) {
+                    selectedPiece = currentPosition.getCpuPieces().get(square);
                 }
 
                 if (selectedPiece instanceof Pawn) {
@@ -107,153 +124,88 @@ public class Game {
             System.out.print((char) i + " ");
         }
         System.out.println();
-
-        // analysis
-        HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
-        for (int squarePos : currentPosition.getMyPieces().keySet()) {
-            Piece piece = currentPosition.getMyPieces().get(squarePos);
-            if (piece instanceof Pawn) {
-                ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Knight) {
-                ((Knight) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Pawn) {
-                ((Pawn) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Bishop) {
-                ((Bishop) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof Queen) {
-                ((Queen) piece).generateMoves(currentPosition, controlledSquares);
-            } else if (piece instanceof King) {
-                ((King) piece).generateMoves(currentPosition, controlledSquares);
-            }
-        }
-
-        for (int squarePos : currentPosition.getMyPieces().keySet()) {
-            Piece piece = currentPosition.getMyPieces().get(squarePos);
-            System.out.print(piece.getClass().toString() + ": ");
-            System.out.println(integerSquareToSquareName(piece.getSquare()));
-            System.out.println("Possible Moves");
-            if (piece.getPossibleMoves() != null) {
-                for (int possibleSquare : piece.getPossibleMoves()) {
-                    System.out.println(integerSquareToSquareName(possibleSquare));
-                }
-            }
-            System.out.println("Possible Captures");
-            if (piece.getCaptures() != null) {
-                for (int captureSquare : piece.getCaptures()) {
-                    System.out.println(integerSquareToSquareName(captureSquare));
-                }
-            }
-            System.out.println("Skewer Threats");
-            if (piece.getSkewerThreats() != null) {
-                for (SkewerTriplet skewerTriplet : piece.getSkewerThreats()) {
-                    Piece skewerThreat = skewerTriplet.getSkewerThreat();
-                    System.out.print("Threat: " + skewerThreat.getClass().toString() + ": ");
-                    System.out.println(integerSquareToSquareName(skewerThreat.getSquare()));
-                    Piece protection = skewerTriplet.getMyProtectedPiece();
-                    System.out.print("Protection: " + protection.getClass().toString() + ": ");
-                    System.out.println(integerSquareToSquareName(protection.getSquare()));
-                }
-            }
-        }
         
-    }
-
-    public static String integerSquareToSquareName(int square) {
-        int row = square % 8;
-        if (row == 0) {
-            row = 8;
-        }
-        
-        int col = 0;
-        if (square % 8 == 0) {
-            col = square / 8 - 1;
-        } else {
-            col = square / 8;
-        }
-
-        char colName = (char) ('a' + col);
-        return colName + Integer.toString(row);
     }
 
     private static void initStartingPosition(int color) {
-        HashMap<Integer, Piece> myStartingPosition = new HashMap<>();
-        HashMap<Integer, Piece> opponentStartingPosition = new HashMap<>();
+        HashMap<Integer, Piece> userStartingPosition = new HashMap<>();
+        HashMap<Integer, Piece> cpuStartingPosition = new HashMap<>();
 
         // insert pawns
         for (int square = 2; square <= 58; square += 8) {
             if (color == WHITE) {
-                myStartingPosition.put(square, new Pawn(1, square, WHITE));
+                userStartingPosition.put(square, new Pawn(1, square, WHITE));
             } else {
-                opponentStartingPosition.put(square, new Pawn(1, square, WHITE));
+                cpuStartingPosition.put(square, new Pawn(1, square, WHITE));
             }
         }
 
         for (int square = 7; square <= 63; square += 8) {
             if (color == WHITE) {
-                opponentStartingPosition.put(square, new Pawn(1, square, BLACK));
+                cpuStartingPosition.put(square, new Pawn(1, square, BLACK));
             } else {
-                myStartingPosition.put(square, new Pawn(1, square, BLACK));
+                userStartingPosition.put(square, new Pawn(1, square, BLACK));
             }
         }
 
         // insert rooks
         if (color == WHITE) {
-            myStartingPosition.put(1, new Rook(5, 1, WHITE));
-            myStartingPosition.put(57, new Rook(5, 57, WHITE));
-            opponentStartingPosition.put(8, new Rook(5, 8, BLACK));
-            opponentStartingPosition.put(64, new Rook(5, 64, BLACK));
+            userStartingPosition.put(1, new Rook(5, 1, WHITE));
+            userStartingPosition.put(57, new Rook(5, 57, WHITE));
+            cpuStartingPosition.put(8, new Rook(5, 8, BLACK));
+            cpuStartingPosition.put(64, new Rook(5, 64, BLACK));
         } else {
-            opponentStartingPosition.put(1, new Rook(5, 1, WHITE));
-            opponentStartingPosition.put(57, new Rook(5, 57, WHITE));
-            myStartingPosition.put(8, new Rook(5, 8, BLACK));
-            myStartingPosition.put(64, new Rook(5, 64, BLACK));
+            cpuStartingPosition.put(1, new Rook(5, 1, WHITE));
+            cpuStartingPosition.put(57, new Rook(5, 57, WHITE));
+            userStartingPosition.put(8, new Rook(5, 8, BLACK));
+            userStartingPosition.put(64, new Rook(5, 64, BLACK));
         }
 
         // insert knights
         if (color == WHITE) {
-            myStartingPosition.put(9, new Knight(3, 9, WHITE));
-            myStartingPosition.put(49, new Knight(3, 49, WHITE));
-            opponentStartingPosition.put(16, new Knight(3, 16, BLACK));
-            opponentStartingPosition.put(56, new Knight(3, 56, BLACK));
+            userStartingPosition.put(9, new Knight(3, 9, WHITE));
+            userStartingPosition.put(49, new Knight(3, 49, WHITE));
+            cpuStartingPosition.put(16, new Knight(3, 16, BLACK));
+            cpuStartingPosition.put(56, new Knight(3, 56, BLACK));
         } else {
-            opponentStartingPosition.put(9, new Knight(3, 9, WHITE));
-            opponentStartingPosition.put(49, new Knight(3, 49, WHITE));
-            myStartingPosition.put(16, new Knight(3, 16, BLACK));
-            myStartingPosition.put(56, new Knight(3, 56, BLACK));
+            cpuStartingPosition.put(9, new Knight(3, 9, WHITE));
+            cpuStartingPosition.put(49, new Knight(3, 49, WHITE));
+            userStartingPosition.put(16, new Knight(3, 16, BLACK));
+            userStartingPosition.put(56, new Knight(3, 56, BLACK));
         }
 
         // insert bishops
         if (color == WHITE) {
-            myStartingPosition.put(17, new Bishop(3, 17, WHITE));
-            myStartingPosition.put(41, new Bishop(3, 41, WHITE));
-            opponentStartingPosition.put(24, new Bishop(3, 24, BLACK));
-            opponentStartingPosition.put(48, new Bishop(3, 48, BLACK));
+            userStartingPosition.put(17, new Bishop(3, 17, WHITE));
+            userStartingPosition.put(41, new Bishop(3, 41, WHITE));
+            cpuStartingPosition.put(24, new Bishop(3, 24, BLACK));
+            cpuStartingPosition.put(48, new Bishop(3, 48, BLACK));
         } else {
-            opponentStartingPosition.put(17, new Bishop(3, 17, WHITE));
-            opponentStartingPosition.put(41, new Bishop(3, 41, WHITE));
-            myStartingPosition.put(24, new Bishop(3, 24, BLACK));
-            myStartingPosition.put(48, new Bishop(3, 48, BLACK));
+            cpuStartingPosition.put(17, new Bishop(3, 17, WHITE));
+            cpuStartingPosition.put(41, new Bishop(3, 41, WHITE));
+            userStartingPosition.put(24, new Bishop(3, 24, BLACK));
+            userStartingPosition.put(48, new Bishop(3, 48, BLACK));
         }
 
         // insert queens
         if (color == WHITE) {
-            myStartingPosition.put(25, new Queen(9, 25, WHITE));
-            opponentStartingPosition.put(32, new Queen(9, 32, BLACK));
+            userStartingPosition.put(25, new Queen(9, 25, WHITE));
+            cpuStartingPosition.put(32, new Queen(9, 32, BLACK));
         } else {
-            opponentStartingPosition.put(25, new Queen(9, 25, WHITE));
-            myStartingPosition.put(32, new Queen(9, 32, BLACK));
+            cpuStartingPosition.put(25, new Queen(9, 25, WHITE));
+            userStartingPosition.put(32, new Queen(9, 32, BLACK));
         }
 
         // insert kings
         if (color == WHITE) {
-            myStartingPosition.put(33, new King(13, 33, WHITE));
-            opponentStartingPosition.put(40, new King(13, 40, BLACK));
+            userStartingPosition.put(33, new King(13, 33, WHITE));
+            cpuStartingPosition.put(40, new King(13, 40, BLACK));
         } else {
-            opponentStartingPosition.put(33, new King(13, 33, WHITE));
-            myStartingPosition.put(40, new King(13, 40, BLACK));
+            cpuStartingPosition.put(33, new King(13, 33, WHITE));
+            userStartingPosition.put(40, new King(13, 40, BLACK));
         }
 
-        currentPosition = new PositionNode(myStartingPosition, opponentStartingPosition);
+        currentPosition = new PositionNode(userStartingPosition, cpuStartingPosition);
     }
 
 }

@@ -7,27 +7,34 @@ public class Knight extends Piece {
 
     @Override
     protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
-        Piece selectedKnight = positionNode.getMyPieces().get(getSquare());
+        Piece selectedKnight = positionNode.getUserPieces().get(getSquare());
+        // check if piece is pinned in front of king (illegal move)
+        if (getSkewerThreats() != null) {
+            for (SkewerTriplet skewerThreat : getSkewerThreats()) {
+                if (skewerThreat.getSkeweredPiece() instanceof King) {
+                    return;
+                }
+            }
+        }
+
         int[] possibleDirections = {K_UP_RIGHT, K_RIGHT_UP, K_UP_LEFT, K_LEFT_UP, K_DOWN_LEFT, K_LEFT_DOWN, K_DOWN_RIGHT, K_RIGHT_DOWN};
 
         for (int delta : possibleDirections) {
             if (!validKnightMove(getSquare(), delta)) {
-                System.out.print("AHHHHHH: " + (getSquare() + delta) + ": ");
-                System.out.println(Game.integerSquareToSquareName(getSquare() + delta));
                 continue;
             }
 
             int newSquare = getSquare() + delta;
             insertToList(selectedKnight, controlledSquares.get(newSquare));
 
-            if (positionNode.getMyPieces().containsKey(newSquare)) {
+            if (positionNode.getUserPieces().containsKey(newSquare)) {
                 continue;
             }
 
             addPossibleMove(newSquare);
 
             // if capture
-            if (positionNode.getOpponentPieces().containsKey(newSquare)) {
+            if (positionNode.getCpuPieces().containsKey(newSquare)) {
                 addCapture(newSquare);
             }
 

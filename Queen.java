@@ -7,10 +7,21 @@ public class Queen extends Piece {
 
     @Override
     protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
-        Piece selectedQueen = positionNode.getMyPieces().get(getSquare());
+        Piece selectedQueen = positionNode.getUserPieces().get(getSquare());
         int[] directions = {UP, LEFT, DOWN, RIGHT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
 
+        outerloop:
         for (int delta : directions) {
+            // check if piece is pinned in front of king (illegal move)
+            if (getSkewerThreats() != null) {
+                for (SkewerTriplet skewerThreat : getSkewerThreats()) {
+                    if (skewerThreat.getSkeweredPiece() instanceof King
+                    && (skewerThreat.getSkewerDirection() != delta || skewerThreat.getSkewerDirection() != -delta)) {
+                        continue outerloop;
+                    }
+                }
+            }
+
             int currentSquare = selectedQueen.getSquare();
             while (validMove(currentSquare, delta)) {
                 currentSquare += delta;
@@ -18,24 +29,24 @@ public class Queen extends Piece {
                 insertToList(selectedQueen, controlledSquares.get(currentSquare));
                 
                 // own piece
-                if (positionNode.getMyPieces().containsKey(currentSquare)) {
+                if (positionNode.getUserPieces().containsKey(currentSquare)) {
                     break;
                 }
 
                 addPossibleMove(currentSquare);
 
                 // if capture
-                if (positionNode.getOpponentPieces().containsKey(currentSquare)) {
+                if (positionNode.getCpuPieces().containsKey(currentSquare)) {
                     addCapture(currentSquare);
 
                     int checkSquare = 0;
                     // check for pins/skewers
                     if (validMove(currentSquare, delta)) {
                         checkSquare = currentSquare + delta;
-                        if (positionNode.getOpponentPieces().containsKey(checkSquare)) {
-                            Piece skeweredPiece = positionNode.getOpponentPieces().get(checkSquare);
+                        if (positionNode.getCpuPieces().containsKey(checkSquare)) {
+                            Piece skeweredPiece = positionNode.getCpuPieces().get(checkSquare);
                             SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedQueen, skeweredPiece, delta);
-                            positionNode.getOpponentPieces().get(currentSquare).addSkewerThreat(newSkewerThreat);
+                            positionNode.getCpuPieces().get(currentSquare).addSkewerThreat(newSkewerThreat);
                         }
                     }
                     

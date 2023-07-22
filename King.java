@@ -27,7 +27,7 @@ public class King extends Piece {
 
     @Override
     protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
-        Piece selectedKing = positionNode.getMyPieces().get(getSquare());
+        Piece selectedKing = positionNode.getUserPieces().get(getSquare());
         int[] directions = {UP, LEFT, DOWN, RIGHT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
 
         for (int delta : directions) {
@@ -38,14 +38,14 @@ public class King extends Piece {
             int newSquare = getSquare() + delta;
             insertToList(selectedKing, controlledSquares.get(newSquare));
 
-            if (positionNode.getMyPieces().containsKey(newSquare)) {
+            if (positionNode.getUserPieces().containsKey(newSquare)) {
                 continue;
             }
 
             addPossibleMove(newSquare);
 
             // if capture
-            if (positionNode.getOpponentPieces().containsKey(newSquare)) {
+            if (positionNode.getCpuPieces().containsKey(newSquare)) {
                 addCapture(newSquare);
             }
 
@@ -67,13 +67,13 @@ public class King extends Piece {
         }
 
         boolean castleStatus = true;
-        if (positionNode.getMyPieces().containsKey(checkSquare) 
-        && positionNode.getMyPieces().get(checkSquare) instanceof Rook
-        && ((Rook) positionNode.getMyPieces().get(checkSquare)).getStationaryStatus()) {
+        if (positionNode.getUserPieces().containsKey(checkSquare) 
+        && positionNode.getUserPieces().get(checkSquare) instanceof Rook
+        && ((Rook) positionNode.getUserPieces().get(checkSquare)).getStationaryStatus()) {
             // check for pieces in the way or unsafe squares
             for (int i = checkSquare; i <= checkSquare + 32; i += 8) {
-                if (positionNode.getMyPieces().containsKey(i)
-                && positionNode.getOpponentPieces().containsKey(i)
+                if (positionNode.getUserPieces().containsKey(i)
+                && positionNode.getCpuPieces().containsKey(i)
                 && unsafeSquares.containsKey(i)) {
                     castleStatus = false;
                 }
@@ -92,13 +92,13 @@ public class King extends Piece {
         }
 
         castleStatus = true;
-        if (positionNode.getMyPieces().containsKey(checkSquare) 
-        && positionNode.getMyPieces().get(checkSquare) instanceof Rook
-        && ((Rook) positionNode.getMyPieces().get(checkSquare)).getStationaryStatus()) {
+        if (positionNode.getUserPieces().containsKey(checkSquare) 
+        && positionNode.getUserPieces().get(checkSquare) instanceof Rook
+        && ((Rook) positionNode.getUserPieces().get(checkSquare)).getStationaryStatus()) {
             // check for pieces in the way or unsafe squares
             for (int i = checkSquare; i >= checkSquare - 16; i -= 8) {
-                if (positionNode.getMyPieces().containsKey(i)
-                && positionNode.getOpponentPieces().containsKey(i)
+                if (positionNode.getUserPieces().containsKey(i)
+                && positionNode.getCpuPieces().containsKey(i)
                 && unsafeSquares.containsKey(i)) {
                     castleStatus = false;
                 }

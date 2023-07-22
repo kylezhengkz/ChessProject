@@ -1,11 +1,11 @@
 class SkewerTriplet {
     private Piece skewerThreat;
-    private Piece myProtectedPiece;
+    private Piece skeweredPiece;
     private int skewerDirection;
 
     SkewerTriplet(Piece skewerThreat, Piece myProtectedPiece, int skewerDirection) {
         this.skewerThreat = skewerThreat;
-        this.myProtectedPiece = myProtectedPiece;
+        this.skeweredPiece = myProtectedPiece;
         this.skewerDirection = skewerDirection;
     }
 
@@ -13,8 +13,8 @@ class SkewerTriplet {
         return skewerThreat;
     }
 
-    protected Piece getMyProtectedPiece() {
-        return myProtectedPiece;
+    protected Piece getSkeweredPiece() {
+        return skeweredPiece;
     }
 
     protected int getSkewerDirection() {
