@@ -5,13 +5,17 @@ public class Game {
     public static final int WHITE = 1;
     public static final int BLACK = 2;
 
+    public static int color = -1;
+
     public static PositionNode currentPosition;
 
     public static void main(String[] args) {
+        MenuScreen gui = new MenuScreen();
+        gui.setVisible(true);
+
         Scanner sc = new Scanner(System.in);
 
         String input;
-        int color = -1;
         System.out.print("Enter 'W' to play as white, and 'B' to play as black: ");
         input = sc.nextLine();
         if (input.equals("W")) {
