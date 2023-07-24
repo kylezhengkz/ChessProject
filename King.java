@@ -25,8 +25,7 @@ public class King extends Piece {
         stationaryStatus = false;
     }
 
-    @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
+    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares, HashMap<Integer, List<Piece>> unsafeSquares) {
         Piece selectedKing = positionNode.getUserPieces().get(getSquare());
         int[] directions = {UP, LEFT, DOWN, RIGHT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
 
@@ -36,6 +35,9 @@ public class King extends Piece {
             }
 
             int newSquare = getSquare() + delta;
+            if (unsafeSquares.containsKey(newSquare)) { // illegal move
+                continue;
+            }
             insertToList(selectedKing, controlledSquares.get(newSquare));
 
             if (positionNode.getUserPieces().containsKey(newSquare)) {
