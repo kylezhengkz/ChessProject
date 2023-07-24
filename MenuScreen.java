@@ -16,20 +16,16 @@ public class MenuScreen extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Create the main panel to hold the components
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        // Create and add components to the main panel
         JLabel label = new JLabel("Welcome to My Chess Engine!");
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(label);
 
-        // Add some padding to move the label down slightly
         label.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
         label.setPreferredSize(new Dimension(400, 100));
 
-        // Create a panel for the buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
@@ -39,8 +35,9 @@ public class MenuScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Starting the game as White!");
-                Game.color = Game.WHITE;
                 dispose();
+                GUI gui = new GUI(GlobalConstants.WHITE);
+                gui.setVisible(true);
             }
         });
         buttonPanel.add(playAsWhiteButton);
@@ -51,8 +48,9 @@ public class MenuScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Starting the game as Black!");
-                Game.color = Game.BLACK;
                 dispose();
+                GUI gui = new GUI(GlobalConstants.BLACK);
+                gui.setVisible(true);
             }
         });
         buttonPanel.add(playAsBlackButton);
