@@ -55,50 +55,50 @@ public class GUI extends JFrame {
                 int[] coor = squareToCoor(square);
                 if (userPiece instanceof Pawn) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhitePawn.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhitePawn.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackPawn.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackPawn.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Knight) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteKnight.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteKnight.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackKnight.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackKnight.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Bishop) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteBishop.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteBishop.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackBishop.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackBishop.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Rook) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteRook.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteRook.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackRook.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackRook.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Queen) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteQueen.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteQueen.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackQueen.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackQueen.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof King) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteKing.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteKing.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackKing.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackKing.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 }
@@ -114,50 +114,50 @@ public class GUI extends JFrame {
                 int[] coor = squareToCoor(square);
                 if (userPiece instanceof Pawn) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhitePawn.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhitePawn.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackPawn.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackPawn.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Knight) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteKnight.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteKnight.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackKnight.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackKnight.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Bishop) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteBishop.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteBishop.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackBishop.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackBishop.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Rook) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteRook.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteRook.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackRook.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackRook.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof Queen) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteQueen.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteQueen.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackQueen.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackQueen.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 } else if (userPiece instanceof King) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
-                        ImageIcon imageIcon = new ImageIcon("WhiteKing.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/WhiteKing.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     } else {
-                        ImageIcon imageIcon = new ImageIcon("BlackKing.png");
+                        ImageIcon imageIcon = new ImageIcon("Images/BlackKing.png");
                         g.drawImage(imageIcon.getImage(), coor[0], coor[1], IMAGEWIDTH, IMAGEHEIGHT, this);
                     }
                 }
