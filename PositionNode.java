@@ -26,17 +26,17 @@ public class PositionNode {
         for (int square : getCpuPieces().keySet()) {
             Piece cpuPiece = getCpuPieces().get(square);
             if (cpuPiece instanceof Pawn) {
-                ((Pawn) cpuPiece).generateMoves(this, unsafeSquares);
+                ((Pawn) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
             } else if (cpuPiece instanceof Knight) {
-                ((Knight) cpuPiece).generateMoves(this, unsafeSquares);
-            } else if (cpuPiece instanceof Pawn) {
-                ((Pawn) cpuPiece).generateMoves(this, unsafeSquares);
+                ((Knight) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
             } else if (cpuPiece instanceof Bishop) {
-                ((Bishop) cpuPiece).generateMoves(this, unsafeSquares);
+                ((Bishop) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
+            } else if (cpuPiece instanceof Rook) {
+                ((Rook) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
             } else if (cpuPiece instanceof Queen) {
-                ((Queen) cpuPiece).generateMoves(this, unsafeSquares);
+                ((Queen) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
             } else if (cpuPiece instanceof King) {
-                ((King) cpuPiece).generateMoves(this, unsafeSquares);
+                ((King) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
             }
         }
 
@@ -45,19 +45,20 @@ public class PositionNode {
             Piece userPiece = getUserPieces().get(square);
 
             if (userPiece instanceof Pawn) {
-                ((Pawn) userPiece).generateMoves(this, controlledSquares);
+                ((Pawn) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             } else if (userPiece instanceof Knight) {
-                ((Knight) userPiece).generateMoves(this, controlledSquares);
-            } else if (userPiece instanceof Pawn) {
-                ((Pawn) userPiece).generateMoves(this, controlledSquares);
+                ((Knight) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             } else if (userPiece instanceof Bishop) {
-                ((Bishop) userPiece).generateMoves(this, controlledSquares);
+                ((Bishop) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
+            } else if (userPiece instanceof Rook) {
+                ((Rook) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             } else if (userPiece instanceof Queen) {
-                ((Queen) userPiece).generateMoves(this, controlledSquares);
+                ((Queen) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             } else if (userPiece instanceof King) {
-                ((King) userPiece).generateMoves(this, controlledSquares);
+                ((King) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             }
         }
+        System.out.println("END");
     }
 
 }

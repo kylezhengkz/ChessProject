@@ -85,7 +85,7 @@ public class Piece {
         return skewerThreats;
     }
 
-    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {}
+    protected void generateMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> controlledSquares) {}
 
     protected void insertToList(Piece element, List<Piece> pieceList) {
         if (pieceList == null) {
@@ -103,33 +103,30 @@ public class Piece {
     }
 
     protected boolean validMove(int initialSquare, int delta) {
+        if (initialSquare % 8 == 1) {
+            if (delta == DOWN || delta == DOWN_LEFT || delta == DOWN_RIGHT) {
+                return false;
+            }
+        } 
+        
+        if (initialSquare % 8 == 0) {
+            if (delta == UP || delta == UP_LEFT || delta == UP_RIGHT) {
+                return false;
+            }
+        } 
+        
         if (initialSquare >= 1 && initialSquare <= 8) {
             if (delta == LEFT || delta == UP_LEFT || delta == DOWN_LEFT) {
                 return false;
-            } else {
-                return true;
             }
-        } else if (initialSquare >= 57 && initialSquare <= 64) {
+        } 
+        
+        if (initialSquare >= 57 && initialSquare <= 64) {
             if (delta == RIGHT || delta == UP_RIGHT || delta == DOWN_RIGHT) {
                 return false;
-            } else {
-                return true;
             }
-        } else if (initialSquare % 8 == 1) {
-            if (delta == DOWN || delta == DOWN_LEFT || delta == DOWN_RIGHT) {
-                return false;
-            } else {
-                return true;
-            }
-        } else if (initialSquare % 8 == 0) {
-            if (delta == UP || delta == UP_LEFT || delta == UP_RIGHT) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
         }
+        return true;
     }
 
 }

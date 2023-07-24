@@ -6,8 +6,8 @@ public class Knight extends Piece {
     }
 
     @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
-        Piece selectedKnight = positionNode.getUserPieces().get(getSquare());
+    protected void generateMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> controlledSquares) {
+        Piece selectedKnight = teamPieces.get(getSquare());
         // check if piece is pinned in front of king (illegal move)
         if (getSkewerThreats() != null) {
             for (SkewerTriplet skewerThreat : getSkewerThreats()) {
@@ -27,14 +27,14 @@ public class Knight extends Piece {
             int newSquare = getSquare() + delta;
             insertToList(selectedKnight, controlledSquares.get(newSquare));
 
-            if (positionNode.getUserPieces().containsKey(newSquare)) {
+            if (teamPieces.containsKey(newSquare)) {
                 continue;
             }
 
             addPossibleMove(newSquare);
 
             // if capture
-            if (positionNode.getCpuPieces().containsKey(newSquare)) {
+            if (opponentPieces.containsKey(newSquare)) {
                 addCapture(newSquare);
             }
 

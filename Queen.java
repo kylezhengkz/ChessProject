@@ -6,8 +6,8 @@ public class Queen extends Piece {
     }
 
     @Override
-    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares) {
-        Piece selectedQueen = positionNode.getUserPieces().get(getSquare());
+    protected void generateMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> controlledSquares) {
+        Piece selectedQueen = teamPieces.get(getSquare());
         int[] directions = {UP, LEFT, DOWN, RIGHT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
 
         outerloop:
@@ -29,24 +29,24 @@ public class Queen extends Piece {
                 insertToList(selectedQueen, controlledSquares.get(currentSquare));
                 
                 // own piece
-                if (positionNode.getUserPieces().containsKey(currentSquare)) {
+                if (teamPieces.containsKey(currentSquare)) {
                     break;
                 }
 
                 addPossibleMove(currentSquare);
 
                 // if capture
-                if (positionNode.getCpuPieces().containsKey(currentSquare)) {
+                if (opponentPieces.containsKey(currentSquare)) {
                     addCapture(currentSquare);
 
                     int checkSquare = 0;
                     // check for pins/skewers
                     if (validMove(currentSquare, delta)) {
                         checkSquare = currentSquare + delta;
-                        if (positionNode.getCpuPieces().containsKey(checkSquare)) {
-                            Piece skeweredPiece = positionNode.getCpuPieces().get(checkSquare);
+                        if (opponentPieces.containsKey(checkSquare)) {
+                            Piece skeweredPiece = opponentPieces.get(checkSquare);
                             SkewerTriplet newSkewerThreat = new SkewerTriplet(selectedQueen, skeweredPiece, delta);
-                            positionNode.getCpuPieces().get(currentSquare).addSkewerThreat(newSkewerThreat);
+                            opponentPieces.get(currentSquare).addSkewerThreat(newSkewerThreat);
                         }
                     }
                     

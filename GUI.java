@@ -81,7 +81,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 if (userPiece instanceof Pawn) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhitePawn.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -89,7 +89,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackPawn.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -99,7 +99,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Knight) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKnight.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -107,7 +107,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKnight.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -117,7 +117,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Bishop) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteBishop.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -125,7 +125,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackBishop.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -135,7 +135,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Rook) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteRook.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -143,7 +143,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackRook.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -153,7 +153,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Queen) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteQueen.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -161,7 +161,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackQueen.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -171,7 +171,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof King) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKing.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -179,7 +179,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKing.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -200,7 +200,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 if (userPiece instanceof Pawn) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhitePawn.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -208,7 +208,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackPawn.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -218,7 +218,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Knight) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKnight.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -226,7 +226,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKnight.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -236,7 +236,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Bishop) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteBishop.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -244,7 +244,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackBishop.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -254,7 +254,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Rook) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteRook.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -262,7 +262,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackRook.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -272,7 +272,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof Queen) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteQueen.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -280,7 +280,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackQueen.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -290,7 +290,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 } else if (userPiece instanceof King) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKing.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -298,7 +298,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKing.png");
-                        if (drag && square == dragSquare) {
+                        if (drag && (square == dragSquare)) {
                             g.drawImage(imageIcon.getImage(), dragX, dragY, IMAGEWIDTH, IMAGEHEIGHT, this);
                         } else {
                             g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
@@ -336,11 +336,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("MOUSE PRESSED");
         if (userTurn) {
             mouseX = e.getX();
             mouseY = e.getY();
-            int dragSquare = coorToSquare(mouseX, mouseY);
+            dragSquare = coorToSquare(mouseX, mouseY);
             if (currentPosition.getUserPieces().containsKey(dragSquare)) {
                 dragPiece = currentPosition.getUserPieces().get(dragSquare);
                 drag = true;
@@ -350,7 +349,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        System.out.println("MOUSE DRAGGED");
         if (drag) {
             dragX = e.getX();
             dragY = e.getY();
@@ -360,20 +358,23 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        System.out.println("MOUSE RELEASE");
         if (drag) {
             mouseX = e.getX();
             mouseY = e.getY();
             int newSquare = coorToSquare(mouseX, mouseY);
             currentPosition.generatePossibleMoves();
-            if (dragPiece.getPossibleMoves().contains(newSquare)) {
+            if (dragPiece.getPossibleMoves() != null && dragPiece.getPossibleMoves().contains(newSquare)) {
                 currentPosition.getUserPieces().put(newSquare, dragPiece);
+                currentPosition.getUserPieces().remove(newSquare);
                 if (currentPosition.getCpuPieces().containsKey(newSquare)) {
                     currentPosition.getCpuPieces().remove(newSquare);
                 }
             }
-            drag = false;
         }
+        dragPiece = null;
+        dragSquare = -1;
+        drag = false;
+        repaint();
     }
 
     @Override
