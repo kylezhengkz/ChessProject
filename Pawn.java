@@ -92,7 +92,7 @@ public class Pawn extends Piece {
             // en passant
             if (validMove(getSquare(), LEFT * directionMultiplier)) {
                 checkSquare += getSquare() + LEFT * directionMultiplier;
-                if (opponentPieces.containsKey(checkSquare)) {
+                if (opponentPieces.containsKey(checkSquare) && opponentPieces.get(checkSquare) instanceof Pawn) {
                     Pawn opponentPawn = (Pawn) opponentPieces.get(checkSquare);
                     if (opponentPawn.pawnJustMovedTwoSquares) {
                         addPossibleMove(checkSquare + UP * directionMultiplier);
@@ -118,7 +118,7 @@ public class Pawn extends Piece {
             // en passant
             if (validMove(getSquare(), RIGHT * directionMultiplier)) {
                 checkSquare += getSquare() + RIGHT * directionMultiplier;
-                if (opponentPieces.containsKey(checkSquare)) {
+                if (opponentPieces.containsKey(checkSquare) && opponentPieces.get(checkSquare) instanceof Pawn) {
                     Pawn opponentPawn = (Pawn) opponentPieces.get(checkSquare);
                     if (opponentPawn.pawnJustMovedTwoSquares) {
                         addPossibleMove(checkSquare + UP * directionMultiplier);
