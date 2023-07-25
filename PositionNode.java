@@ -58,7 +58,6 @@ public class PositionNode {
                 ((King) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             }
         }
-        System.out.println("END");
     }
 
 }
