@@ -26,6 +26,7 @@ public class Knight extends Piece {
 
             int newSquare = getSquare() + delta;
             insertToList(selectedKnight, controlledSquares.get(newSquare));
+            controlledSquares.put(newSquare, controlledSquares.get(newSquare));
 
             if (teamPieces.containsKey(newSquare)) {
                 continue;

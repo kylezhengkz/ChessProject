@@ -67,7 +67,7 @@ public class Pawn extends Piece {
             if (validMove(getSquare(), 2 * UP * directionMultiplier)) {
                 checkSquare = getSquare() + 2 * UP * directionMultiplier;
                 if (getStationaryStatus() && !teamPieces.containsKey(checkSquare)
-                        && !opponentPieces.containsKey(checkSquare)) {
+                && !opponentPieces.containsKey(checkSquare)) {
                     addPossibleMove(checkSquare);
                 }
             }
@@ -76,8 +76,10 @@ public class Pawn extends Piece {
         if ((legalSkewerDirection != 0 || legalSkewerDirection == UP_LEFT || legalSkewerDirection == -UP_LEFT)) {
             // regular capture
             if (validMove(getSquare(), UP_LEFT * directionMultiplier)) {
+                System.out.println("bleh" + getSquare());
                 checkSquare = getSquare() + UP_LEFT * directionMultiplier;
                 insertToList(selectedPawn, controlledSquares.get(checkSquare));
+                controlledSquares.put(checkSquare, controlledSquares.get(checkSquare));
                 if (opponentPieces.containsKey(checkSquare)) {
                     addPossibleMove(checkSquare);
                     addCapture(checkSquare);
@@ -100,8 +102,11 @@ public class Pawn extends Piece {
         if ((legalSkewerDirection != 0 || legalSkewerDirection == UP_RIGHT || legalSkewerDirection == -UP_RIGHT)) {
             // regular capture
             if (validMove(getSquare(), UP_RIGHT * directionMultiplier)) {
+                System.out.println("bleh" + getSquare());
                 checkSquare = getSquare() + UP_RIGHT * directionMultiplier;
+
                 insertToList(selectedPawn, controlledSquares.get(checkSquare));
+                controlledSquares.put(checkSquare, controlledSquares.get(checkSquare));
                 if (opponentPieces.containsKey(checkSquare)) {
                     addPossibleMove(checkSquare);
                     addCapture(checkSquare);

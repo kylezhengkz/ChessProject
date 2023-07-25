@@ -69,6 +69,10 @@ public class Piece {
         return square;
     }
 
+    protected void setSquare(int square) {
+        this.square = square;
+    }
+
     protected int getColor() {
         return color;
     }
@@ -83,6 +87,12 @@ public class Piece {
 
     protected HashSet<SkewerTriplet> getSkewerThreats() {
         return skewerThreats;
+    }
+
+    protected void clear() {
+        possibleMoves = null;
+        captures = null;
+        skewerThreats = null;
     }
 
     protected void generateMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> controlledSquares) {}

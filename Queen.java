@@ -27,6 +27,7 @@ public class Queen extends Piece {
                 currentSquare += delta;
 
                 insertToList(selectedQueen, controlledSquares.get(currentSquare));
+                controlledSquares.put(currentSquare, controlledSquares.get(currentSquare));
                 
                 // own piece
                 if (teamPieces.containsKey(currentSquare)) {

@@ -23,6 +23,8 @@ public class PositionNode {
 
     protected void generatePossibleMoves() {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
+        HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
+
         for (int square : getCpuPieces().keySet()) {
             Piece cpuPiece = getCpuPieces().get(square);
             if (cpuPiece instanceof Pawn) {
@@ -36,11 +38,12 @@ public class PositionNode {
             } else if (cpuPiece instanceof Queen) {
                 ((Queen) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
             } else if (cpuPiece instanceof King) {
-                ((King) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares);
+                ((King) cpuPiece).generateMoves(getCpuPieces(), getUserPieces(), unsafeSquares, controlledSquares);
             }
         }
 
-        HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
+        System.out.println(unsafeSquares.size());
+
         for (int square : getUserPieces().keySet()) {
             Piece userPiece = getUserPieces().get(square);
 
@@ -55,8 +58,20 @@ public class PositionNode {
             } else if (userPiece instanceof Queen) {
                 ((Queen) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             } else if (userPiece instanceof King) {
-                ((King) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
+                ((King) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares, unsafeSquares);
             }
+        }
+    }
+
+    protected void clearMoves() {
+        for (int square : getCpuPieces().keySet()) {
+            Piece cpuPiece = getCpuPieces().get(square);
+            cpuPiece.clear();
+        }
+
+        for (int square : getUserPieces().keySet()) {
+            Piece userPiece = getUserPieces().get(square);
+            userPiece.clear();
         }
     }
 

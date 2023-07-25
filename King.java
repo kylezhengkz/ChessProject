@@ -25,8 +25,8 @@ public class King extends Piece {
         stationaryStatus = false;
     }
 
-    protected void generateMoves(PositionNode positionNode, HashMap<Integer, List<Piece>> controlledSquares, HashMap<Integer, List<Piece>> unsafeSquares) {
-        Piece selectedKing = positionNode.getUserPieces().get(getSquare());
+    protected void generateMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> controlledSquares, HashMap<Integer, List<Piece>> unsafeSquares) {
+        Piece selectedKing = teamPieces.get(getSquare());
         int[] directions = {UP, LEFT, DOWN, RIGHT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
 
         for (int delta : directions) {
@@ -39,15 +39,16 @@ public class King extends Piece {
                 continue;
             }
             insertToList(selectedKing, controlledSquares.get(newSquare));
+            controlledSquares.put(newSquare, controlledSquares.get(newSquare));
 
-            if (positionNode.getUserPieces().containsKey(newSquare)) {
+            if (teamPieces.containsKey(newSquare)) {
                 continue;
             }
 
             addPossibleMove(newSquare);
 
             // if capture
-            if (positionNode.getCpuPieces().containsKey(newSquare)) {
+            if (opponentPieces.containsKey(newSquare)) {
                 addCapture(newSquare);
             }
 

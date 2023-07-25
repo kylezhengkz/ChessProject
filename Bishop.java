@@ -28,6 +28,7 @@ public class Bishop extends Piece {
                 currentSquare += delta;
 
                 insertToList(selectedBishop, controlledSquares.get(currentSquare));
+                controlledSquares.put(currentSquare, controlledSquares.get(currentSquare));
                 
                 // own piece
                 if (teamPieces.containsKey(currentSquare)) {

@@ -38,6 +38,7 @@ public class Rook extends Piece {
                 currentSquare += delta;
 
                 insertToList(selectedRook, controlledSquares.get(currentSquare));
+                controlledSquares.put(currentSquare, controlledSquares.get(currentSquare));
                 
                 // own piece
                 if (teamPieces.containsKey(currentSquare)) {
