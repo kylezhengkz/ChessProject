@@ -63,7 +63,7 @@ public class King extends Piece {
         int checkSquare = 0;
 
         // check left side
-        if (getColor() == WHITE) {
+        if (getColor() == GlobalConstants.WHITE) {
             checkSquare = 1;
         } else {
             checkSquare = 8;
@@ -88,7 +88,7 @@ public class King extends Piece {
         }
         
         // check right side
-        if (getColor() == WHITE) {
+        if (getColor() == GlobalConstants.WHITE) {
             checkSquare = 64;
         } else {
             checkSquare = 57;

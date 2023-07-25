@@ -37,7 +37,7 @@ public class Pawn extends Piece {
         Piece selectedPawn = teamPieces.get(getSquare());
 
         int directionMultiplier = 1;
-        if (getColor() == BLACK) {
+        if (getColor() == GlobalConstants.BLACK) {
             directionMultiplier = -1;
         }
 
@@ -77,6 +77,10 @@ public class Pawn extends Piece {
             // regular capture
             if (validMove(getSquare(), UP_LEFT * directionMultiplier)) {
                 checkSquare = getSquare() + UP_LEFT * directionMultiplier;
+                System.out.println("initial square: " + getSquare());
+                System.out.println("color: " + getColor());
+                System.out.println("direction multiplier: " + directionMultiplier);
+                System.out.println("new square: " + checkSquare);
                 insertToList(selectedPawn, controlledSquares.get(checkSquare));
                 controlledSquares.put(checkSquare, controlledSquares.get(checkSquare));
                 if (opponentPieces.containsKey(checkSquare)) {
