@@ -42,8 +42,6 @@ public class PositionNode {
             }
         }
 
-        System.out.println(unsafeSquares.size());
-
         for (int square : getUserPieces().keySet()) {
             Piece userPiece = getUserPieces().get(square);
 
