@@ -131,6 +131,9 @@ public class PositionNode {
         for (int square : cpuPieces.keySet()) {
             moveArr[0] = square;
             Piece selectedPiece = cpuPieces.get(square);
+            if (selectedPiece.getPossibleMoves() == null) {
+                continue;
+            }
             for (int move : selectedPiece.getPossibleMoves().keySet()) {
                 moveArr[1] = move;
                 break;

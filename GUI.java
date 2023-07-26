@@ -396,7 +396,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         // castle
-        if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
+        if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles() != null && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook;
             if (newSquare == 17 || newSquare == 24) {
                 selectedRook = (Rook) teamPieces.get(newSquare - 16);
@@ -410,14 +410,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         currentPosition.clearMoves();
-
-        if (userTurn) {
-            userPawnJustMovedTwoSquares = true;
-            prevUserPawn = ((Pawn) pieceToMove);
-        } else {
-            cpuPawnJustMovedTwoSquares = true;
-            prevCpuPawn = ((Pawn) pieceToMove);
-        }
 
         if (userTurn) {
             dragPiece = null;

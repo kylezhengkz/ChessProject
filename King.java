@@ -80,7 +80,6 @@ public class King extends Piece {
             castleStatus = true;
             // check for pieces in the way or unsafe squares
             for (int i = getSquare() - 8; i >= getSquare() - 24; i -= 8) {
-                System.out.println("CHECK LEFT: " + i);
                 if (teamPieces.containsKey(i)
                 || opponentPieces.containsKey(i)
                 || unsafeSquares.containsKey(i)) {
@@ -105,11 +104,9 @@ public class King extends Piece {
         if (teamPieces.containsKey(checkSquare) 
         && teamPieces.get(checkSquare) instanceof Rook
         && ((Rook) teamPieces.get(checkSquare)).getStationaryStatus()) {
-            System.out.println("CHECK 2 HERE");
             castleStatus = true;
             // check for pieces in the way or unsafe squares
             for (int i = getSquare() + 8; i <= getSquare() + 16; i += 8) {
-                System.out.println("CHECK RIGHT: " + i);
                 if (teamPieces.containsKey(i)
                 || opponentPieces.containsKey(i)
                 || unsafeSquares.containsKey(i)) {
