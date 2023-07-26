@@ -17,6 +17,10 @@ public class King extends Piece {
         possibleCastles.add(square);
     }
 
+    protected HashSet<Integer> getPossibleCastles() {
+        return possibleCastles;
+    }
+
     protected boolean getStationaryStatus() {
         return stationaryStatus;
     }
@@ -55,7 +59,7 @@ public class King extends Piece {
         }
     }
 
-    protected void checkCastle(PositionNode positionNode, HashMap<Integer, List<Piece>> unsafeSquares) {
+    protected void checkCastle(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> unsafeSquares) {
         if (!getStationaryStatus()) {
             return;
         }
@@ -69,15 +73,17 @@ public class King extends Piece {
             checkSquare = 8;
         }
 
-        boolean castleStatus = true;
-        if (positionNode.getUserPieces().containsKey(checkSquare) 
-        && positionNode.getUserPieces().get(checkSquare) instanceof Rook
-        && ((Rook) positionNode.getUserPieces().get(checkSquare)).getStationaryStatus()) {
+        boolean castleStatus = false;
+        if (teamPieces.containsKey(checkSquare) 
+        && teamPieces.get(checkSquare) instanceof Rook
+        && ((Rook) teamPieces.get(checkSquare)).getStationaryStatus()) {
+            castleStatus = true;
             // check for pieces in the way or unsafe squares
-            for (int i = checkSquare; i <= checkSquare + 32; i += 8) {
-                if (positionNode.getUserPieces().containsKey(i)
-                && positionNode.getCpuPieces().containsKey(i)
-                && unsafeSquares.containsKey(i)) {
+            for (int i = getSquare() - 8; i >= getSquare() - 24; i -= 8) {
+                System.out.println("CHECK LEFT: " + i);
+                if (teamPieces.containsKey(i)
+                || opponentPieces.containsKey(i)
+                || unsafeSquares.containsKey(i)) {
                     castleStatus = false;
                 }
             }
@@ -85,24 +91,28 @@ public class King extends Piece {
 
         if (castleStatus) {
             addCastle(getSquare() - 16);
+            addPossibleMove(getSquare() - 16);
         }
         
         // check right side
         if (getColor() == GlobalConstants.WHITE) {
-            checkSquare = 64;
-        } else {
             checkSquare = 57;
+        } else {
+            checkSquare = 64;
         }
 
-        castleStatus = true;
-        if (positionNode.getUserPieces().containsKey(checkSquare) 
-        && positionNode.getUserPieces().get(checkSquare) instanceof Rook
-        && ((Rook) positionNode.getUserPieces().get(checkSquare)).getStationaryStatus()) {
+        castleStatus = false;
+        if (teamPieces.containsKey(checkSquare) 
+        && teamPieces.get(checkSquare) instanceof Rook
+        && ((Rook) teamPieces.get(checkSquare)).getStationaryStatus()) {
+            System.out.println("CHECK 2 HERE");
+            castleStatus = true;
             // check for pieces in the way or unsafe squares
-            for (int i = checkSquare; i >= checkSquare - 16; i -= 8) {
-                if (positionNode.getUserPieces().containsKey(i)
-                && positionNode.getCpuPieces().containsKey(i)
-                && unsafeSquares.containsKey(i)) {
+            for (int i = getSquare() + 8; i <= getSquare() + 16; i += 8) {
+                System.out.println("CHECK RIGHT: " + i);
+                if (teamPieces.containsKey(i)
+                || opponentPieces.containsKey(i)
+                || unsafeSquares.containsKey(i)) {
                     castleStatus = false;
                 }
             }
@@ -110,6 +120,7 @@ public class King extends Piece {
 
         if (castleStatus) {
             addCastle(getSquare() + 16);
+            addPossibleMove(getSquare() + 16);
         }
     }
 

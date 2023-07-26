@@ -21,7 +21,7 @@ public class PositionNode {
         return children;
     }
 
-    protected void generatePossibleMoves() {
+    protected void generateUserPossibleMoves() {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
@@ -42,6 +42,7 @@ public class PositionNode {
             }
         }
 
+        King userKing = null; // init
         for (int square : getUserPieces().keySet()) {
             Piece userPiece = getUserPieces().get(square);
 
@@ -56,9 +57,13 @@ public class PositionNode {
             } else if (userPiece instanceof Queen) {
                 ((Queen) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares);
             } else if (userPiece instanceof King) {
-                ((King) userPiece).generateMoves(getUserPieces(), getCpuPieces(), controlledSquares, unsafeSquares);
+                userKing = (King) userPiece;
+                userKing.generateMoves(getUserPieces(), getCpuPieces(), controlledSquares, unsafeSquares);
             }
         }
+
+        userKing.checkCastle(userPieces, cpuPieces, unsafeSquares);
+
     }
 
     protected void clearMoves() {

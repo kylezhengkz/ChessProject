@@ -344,7 +344,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             mouseX = e.getX();
             mouseY = e.getY();
             int newSquare = coorToSquare(mouseX, mouseY);
-            currentPosition.generatePossibleMoves();
+            currentPosition.generateUserPossibleMoves();
+
+            if (dragPiece instanceof King) {
+                if (dragPiece.getPossibleMoves() != null) {
+                    for (int square : dragPiece.getPossibleMoves()) {
+                        System.out.println(square);
+                    }
+                }
+            }
+
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().contains(newSquare))) {
                 if (dragPiece instanceof Pawn) {
                     ((Pawn) dragPiece).movePawn();
@@ -353,6 +362,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         temporaryStatus = true;
                         prevPawn = ((Pawn) dragPiece);
                     }
+                } else if (dragPiece instanceof King) {
+                    ((King) dragPiece).moveKing();
+                } else if (dragPiece instanceof Rook) {
+                    ((Rook) dragPiece).moveRook();
                 }
                 currentPosition.getUserPieces().put(newSquare, dragPiece);
                 dragPiece.setSquare(newSquare);
@@ -360,6 +373,21 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 if (currentPosition.getCpuPieces().containsKey(newSquare)) {
                     currentPosition.getCpuPieces().remove(newSquare);
                 }
+
+                // castle
+                if (dragPiece instanceof King && ((King) dragPiece).getPossibleCastles().contains(newSquare)) {
+                    Rook selectedRook;
+                    if (newSquare == 17 || newSquare == 24) {
+                        selectedRook = (Rook) currentPosition.getUserPieces().get(newSquare - 16);
+                        currentPosition.getUserPieces().put(newSquare + 8, selectedRook);
+                        currentPosition.getUserPieces().remove(newSquare - 16);
+                    } else if (newSquare == 49 || newSquare == 56) {
+                        selectedRook = (Rook) currentPosition.getUserPieces().get(newSquare + 8);
+                        currentPosition.getUserPieces().put(newSquare - 8, selectedRook);
+                        currentPosition.getUserPieces().remove(newSquare + 8);
+                    }
+                }
+
                 currentPosition.clearMoves();
             }
         }
