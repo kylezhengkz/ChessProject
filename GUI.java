@@ -359,6 +359,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                 Piece cpuPieceToMove = currentPosition.getCpuPieces().get(move[0]);
                 implementNewMove(cpuPieceToMove, move[0], move[1], currentPosition.getCpuPieces(), currentPosition.getUserPieces());
                 repaint();
+            } else {
+                dragPiece = null;
+                dragSquare = -1;
+                drag = false;
+                repaint();
             }
         } else {
             dragPiece = null;

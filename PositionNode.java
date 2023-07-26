@@ -69,7 +69,9 @@ public class PositionNode {
             }
         }
 
-        userKing.checkCastle(userPieces, cpuPieces, unsafeSquares);
+        if (userKing != null) {
+            userKing.checkCastle(userPieces, cpuPieces, unsafeSquares);
+        }
     }
 
     protected void clearMoves() {
@@ -125,7 +127,9 @@ public class PositionNode {
             }
         }
 
-        cpuKing.checkCastle(cpuPieces, userPieces, unsafeSquares);
+        if (cpuKing != null) {
+            cpuKing.checkCastle(cpuPieces, userPieces, unsafeSquares);
+        }
 
         int[] moveArr = new int[2];
         for (int square : cpuPieces.keySet()) {
