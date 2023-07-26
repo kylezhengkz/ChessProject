@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.*;
 
 public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
@@ -29,8 +30,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     private static boolean userTurn;
 
     // TO-DO
-    private static boolean temporaryStatus = false;
-    private static Pawn prevPawn;
+    private static boolean userPawnJustMovedTwoSquares = false;
+    private static Pawn prevUserPawn;
+
+    private static boolean cpuPawnJustMovedTwoSquares = false;
+    private static Pawn prevCpuPawn;
 
     public GUI(int userColor) {
         setTitle("My Chess Engine");
@@ -346,55 +350,93 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             int newSquare = coorToSquare(mouseX, mouseY);
             currentPosition.generateUserPossibleMoves();
 
-            if (dragPiece instanceof King) {
-                if (dragPiece.getPossibleMoves() != null) {
-                    for (int square : dragPiece.getPossibleMoves()) {
-                        System.out.println(square);
-                    }
+            if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
+                implementNewMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
+                repaint();
+
+                int[] move = new int[2];
+                move = currentPosition.searchCpuBestMove();
+                Piece cpuPieceToMove = currentPosition.getCpuPieces().get(move[0]);
+                implementNewMove(cpuPieceToMove, move[0], move[1], currentPosition.getCpuPieces(), currentPosition.getUserPieces());
+                repaint();
+            }
+        } else {
+            dragPiece = null;
+            dragSquare = -1;
+            drag = false;
+            repaint();
+        }
+    }
+
+    private void implementNewMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+        // update any statuses
+        if (pieceToMove instanceof Pawn) {
+            ((Pawn) pieceToMove).movePawn();
+            if ((newSquare - oldSquare) == 2) {
+                ((Pawn) pieceToMove).moveTwoSquares();
+                if (userTurn) {
+                    userPawnJustMovedTwoSquares = true;
+                    prevUserPawn = ((Pawn) pieceToMove);
+                } else {
+                    cpuPawnJustMovedTwoSquares = true;
+                    prevCpuPawn = ((Pawn) pieceToMove);
                 }
             }
+        } else if (pieceToMove instanceof King) {
+            ((King) pieceToMove).moveKing();
+        } else if (pieceToMove instanceof Rook) {
+            ((Rook) pieceToMove).moveRook();
+        }
 
-            if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().contains(newSquare))) {
-                if (dragPiece instanceof Pawn) {
-                    ((Pawn) dragPiece).movePawn();
-                    if ((newSquare - dragSquare) == 2) {
-                        ((Pawn) dragPiece).moveTwoSquares();
-                        temporaryStatus = true;
-                        prevPawn = ((Pawn) dragPiece);
-                    }
-                } else if (dragPiece instanceof King) {
-                    ((King) dragPiece).moveKing();
-                } else if (dragPiece instanceof Rook) {
-                    ((Rook) dragPiece).moveRook();
-                }
-                currentPosition.getUserPieces().put(newSquare, dragPiece);
-                dragPiece.setSquare(newSquare);
-                currentPosition.getUserPieces().remove(dragSquare);
-                if (currentPosition.getCpuPieces().containsKey(newSquare)) {
-                    currentPosition.getCpuPieces().remove(newSquare);
-                }
+        teamPieces.put(newSquare, pieceToMove);
+        pieceToMove.setSquare(newSquare);
+        teamPieces.remove(oldSquare);
+        if (opponentPieces.containsKey(newSquare)) {
+            opponentPieces.remove(newSquare);
+        }
 
-                // castle
-                if (dragPiece instanceof King && ((King) dragPiece).getPossibleCastles().contains(newSquare)) {
-                    Rook selectedRook;
-                    if (newSquare == 17 || newSquare == 24) {
-                        selectedRook = (Rook) currentPosition.getUserPieces().get(newSquare - 16);
-                        currentPosition.getUserPieces().put(newSquare + 8, selectedRook);
-                        currentPosition.getUserPieces().remove(newSquare - 16);
-                    } else if (newSquare == 49 || newSquare == 56) {
-                        selectedRook = (Rook) currentPosition.getUserPieces().get(newSquare + 8);
-                        currentPosition.getUserPieces().put(newSquare - 8, selectedRook);
-                        currentPosition.getUserPieces().remove(newSquare + 8);
-                    }
-                }
-
-                currentPosition.clearMoves();
+        // castle
+        if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
+            Rook selectedRook;
+            if (newSquare == 17 || newSquare == 24) {
+                selectedRook = (Rook) teamPieces.get(newSquare - 16);
+                teamPieces.put(newSquare + 8, selectedRook);
+                teamPieces.remove(newSquare - 16);
+            } else if (newSquare == 49 || newSquare == 56) {
+                selectedRook = (Rook) teamPieces.get(newSquare + 8);
+                teamPieces.put(newSquare - 8, selectedRook);
+                teamPieces.remove(newSquare + 8);
             }
         }
-        dragPiece = null;
-        dragSquare = -1;
-        drag = false;
-        repaint();
+
+        currentPosition.clearMoves();
+
+        if (userTurn) {
+            userPawnJustMovedTwoSquares = true;
+            prevUserPawn = ((Pawn) pieceToMove);
+        } else {
+            cpuPawnJustMovedTwoSquares = true;
+            prevCpuPawn = ((Pawn) pieceToMove);
+        }
+
+        if (userTurn) {
+            dragPiece = null;
+            dragSquare = -1;
+            drag = false;
+            if (cpuPawnJustMovedTwoSquares) {
+                prevCpuPawn.changeJustMoveStatus();
+                prevCpuPawn = null;
+                cpuPawnJustMovedTwoSquares = false;
+            }
+            userTurn = false;
+        } else {
+            if (userPawnJustMovedTwoSquares) {
+                prevUserPawn.changeJustMoveStatus();
+                prevUserPawn = null;
+                userPawnJustMovedTwoSquares = false;
+            }
+            userTurn = true;
+        }
     }
 
     @Override

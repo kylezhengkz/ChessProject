@@ -49,7 +49,7 @@ public class King extends Piece {
                 continue;
             }
 
-            addPossibleMove(newSquare);
+            addPossibleMove(newSquare, 0);
 
             // if capture
             if (opponentPieces.containsKey(newSquare)) {
@@ -91,7 +91,7 @@ public class King extends Piece {
 
         if (castleStatus) {
             addCastle(getSquare() - 16);
-            addPossibleMove(getSquare() - 16);
+            addPossibleMove(getSquare() - 16, 0);
         }
         
         // check right side
@@ -120,7 +120,7 @@ public class King extends Piece {
 
         if (castleStatus) {
             addCastle(getSquare() + 16);
-            addPossibleMove(getSquare() + 16);
+            addPossibleMove(getSquare() + 16, 0);
         }
     }
 

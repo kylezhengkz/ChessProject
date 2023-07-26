@@ -32,7 +32,7 @@ public class Knight extends Piece {
                 continue;
             }
 
-            addPossibleMove(newSquare);
+            addPossibleMove(newSquare, 0);
 
             // if capture
             if (opponentPieces.containsKey(newSquare)) {

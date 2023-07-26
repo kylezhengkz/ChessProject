@@ -4,7 +4,7 @@ public class Piece {
     private double value;
     private int square;
     private int color;
-    private HashSet<Integer> possibleMoves;
+    private HashMap<Integer, Double> possibleMoves;
     private HashSet<Integer> captures; // subset of possibleMoves
     private HashSet<SkewerTriplet> skewerThreats;
 
@@ -34,12 +34,12 @@ public class Piece {
         this.square = square;
     }
 
-    protected void addPossibleMove(int square) {
+    protected void addPossibleMove(int square, double value) {
         if (possibleMoves == null) {
-            possibleMoves = new HashSet<>();
+            possibleMoves = new HashMap<>();
         }
         
-        possibleMoves.add(square);
+        possibleMoves.put(square, value);
     }
 
     protected void addCapture(int square) {
@@ -74,7 +74,7 @@ public class Piece {
         return color;
     }
 
-    protected HashSet<Integer> getPossibleMoves() {
+    protected HashMap<Integer, Double> getPossibleMoves() {
         return possibleMoves;
     }
 

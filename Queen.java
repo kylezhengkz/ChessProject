@@ -34,7 +34,7 @@ public class Queen extends Piece {
                     break;
                 }
 
-                addPossibleMove(currentSquare);
+                addPossibleMove(currentSquare, 0);
 
                 // if capture
                 if (opponentPieces.containsKey(currentSquare)) {
