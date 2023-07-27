@@ -77,6 +77,9 @@ public class Pawn extends Piece {
             // regular capture
             if (validMove(getSquare(), UP_LEFT * directionMultiplier)) {
                 checkSquare = getSquare() + UP_LEFT * directionMultiplier;
+                if (controlledSquares.get(checkSquare) == null) {
+                    controlledSquares.put(checkSquare, new ArrayList<>());
+                }
                 insertToList(selectedPawn, controlledSquares.get(checkSquare));
                 controlledSquares.put(checkSquare, controlledSquares.get(checkSquare));
                 if (opponentPieces.containsKey(checkSquare)) {
@@ -102,7 +105,9 @@ public class Pawn extends Piece {
             // regular capture
             if (validMove(getSquare(), UP_RIGHT * directionMultiplier)) {
                 checkSquare = getSquare() + UP_RIGHT * directionMultiplier;
-
+                if (controlledSquares.get(checkSquare) == null) {
+                    controlledSquares.put(checkSquare, new ArrayList<>());
+                }
                 insertToList(selectedPawn, controlledSquares.get(checkSquare));
                 controlledSquares.put(checkSquare, controlledSquares.get(checkSquare));
                 if (opponentPieces.containsKey(checkSquare)) {

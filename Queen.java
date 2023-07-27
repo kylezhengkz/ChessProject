@@ -26,6 +26,9 @@ public class Queen extends Piece {
             while (validMove(currentSquare, delta)) {
                 currentSquare += delta;
 
+                if (controlledSquares.get(currentSquare) == null) {
+                    controlledSquares.put(currentSquare, new ArrayList<>());
+                }
                 insertToList(selectedQueen, controlledSquares.get(currentSquare));
                 controlledSquares.put(currentSquare, controlledSquares.get(currentSquare));
                 

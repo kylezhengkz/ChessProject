@@ -36,6 +36,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     private static boolean cpuPawnJustMovedTwoSquares = false;
     private static Pawn prevCpuPawn;
 
+    // TEMPORARY
+    private static HashSet<Integer> controlledStuff = new HashSet<>();
+
     public GUI(int userColor) {
         setTitle("My Chess Engine");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,6 +76,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         g.setColor(myWhiteYellow);
                     } else {
                         g.setColor(myDarkGreen);
+                    }
+
+                    int curSquare = coorToSquare(x, y);
+                    if (controlledStuff.contains(curSquare)) {
+                        g.setColor(Color.BLUE);
                     }
 
                     g.fillRect(x, y, TILESIZE, TILESIZE);
@@ -348,7 +356,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             mouseX = e.getX();
             mouseY = e.getY();
             int newSquare = coorToSquare(mouseX, mouseY);
-            currentPosition.generateUserPossibleMoves();
+            controlledStuff.clear();
+            currentPosition.generateUserPossibleMoves(controlledStuff);
 
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
                 implementNewMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());

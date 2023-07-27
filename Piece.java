@@ -100,10 +100,6 @@ public class Piece {
     protected void generateMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, HashMap<Integer, List<Piece>> controlledSquares) {}
 
     protected void insertToList(Piece element, List<Piece> pieceList) {
-        if (pieceList == null) {
-            pieceList = new ArrayList<>();
-        }
-
         int index = 0;
         for (Piece piece : pieceList) {
             if (element.getValue() < piece.getValue()) {

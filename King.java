@@ -42,6 +42,10 @@ public class King extends Piece {
             if (unsafeSquares.containsKey(newSquare)) { // illegal move
                 continue;
             }
+
+            if (controlledSquares.get(newSquare) == null) {
+                controlledSquares.put(newSquare, new ArrayList<>());
+            }
             insertToList(selectedKing, controlledSquares.get(newSquare));
             controlledSquares.put(newSquare, controlledSquares.get(newSquare));
 

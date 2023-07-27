@@ -22,7 +22,7 @@ public class PositionNode {
         return children;
     }
 
-    protected void generateUserPossibleMoves() {
+    protected void generateUserPossibleMoves(HashSet<Integer> controlledStuff) {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
@@ -63,6 +63,14 @@ public class PositionNode {
             }
         }
 
+        // TEMPORARY
+        for (int key : controlledSquares.keySet()) {
+            if (controlledSquares.get(key) == null) {
+                continue;
+            }
+            controlledStuff.add(key);
+;       }
+        
         if (userKing != null && !unsafeSquares.containsKey(userKing.getSquare())) {
             userKing.checkCastle(userPieces, cpuPieces, unsafeSquares);
         }
@@ -205,8 +213,12 @@ public class PositionNode {
     }
 
     private Double evaluateTrade(int tradingSquare, double initialCaptureVal, List<Piece> teamPieces, List<Piece> opponentPieces) {
+        System.out.println("EVALUATE"); 
         List<Piece> teamPiecesCopy = new ArrayList<>(teamPieces);
         List<Piece> opponentPiecesCopy = new ArrayList<>(opponentPieces);
+
+        System.out.println("MY BACKUP: " + teamPiecesCopy.size());
+        System.out.println("THEIR TAKEBACKS: " + opponentPiecesCopy.size());
 
         double captureVal = initialCaptureVal;
         while (true) {

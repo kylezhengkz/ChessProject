@@ -37,6 +37,9 @@ public class Rook extends Piece {
             while (validMove(currentSquare, delta)) {
                 currentSquare += delta;
 
+                if (controlledSquares.get(currentSquare) == null) {
+                    controlledSquares.put(currentSquare, new ArrayList<>());
+                }
                 insertToList(selectedRook, controlledSquares.get(currentSquare));
                 controlledSquares.put(currentSquare, controlledSquares.get(currentSquare));
                 

@@ -25,6 +25,9 @@ public class Knight extends Piece {
             }
 
             int newSquare = getSquare() + delta;
+            if (controlledSquares.get(newSquare) == null) {
+                controlledSquares.put(newSquare, new ArrayList<>());
+            }
             insertToList(selectedKnight, controlledSquares.get(newSquare));
             controlledSquares.put(newSquare, controlledSquares.get(newSquare));
 
