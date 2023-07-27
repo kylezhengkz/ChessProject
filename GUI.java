@@ -49,6 +49,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             userTurn = true;
         } else {
             userTurn = false;
+            int[] move = new int[2];
+            move = currentPosition.searchCpuBestMove();
+            Piece cpuPieceToMove = currentPosition.getCpuPieces().get(move[0]);
+            implementNewMove(cpuPieceToMove, move[0], move[1], currentPosition.getCpuPieces(), currentPosition.getUserPieces());
+            repaint();
         }
 
         JPanel chessBoardPanel = new ChessboardPanel();
