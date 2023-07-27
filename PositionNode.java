@@ -237,8 +237,8 @@ public class PositionNode {
             } else { // opponent should not capture back
                 break;
             }
-    
-            if (teamPiecesCopy.get(1).getValue() <= opponentPiecesCopy.get(1).getValue()) {
+
+            if (opponentPiecesCopy.size() == 1 || (teamPiecesCopy.get(1).getValue() <= opponentPiecesCopy.get(1).getValue())) {
                 captureVal += opponentPiecesCopy.get(0).getValue();
                 opponentPiecesCopy.remove(0);
             } else { // team should not capture back
