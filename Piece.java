@@ -7,6 +7,7 @@ public class Piece {
     private HashMap<Integer, Double> possibleMoves;
     private HashSet<Integer> captures; // subset of possibleMoves
     private HashSet<SkewerTriplet> skewerThreats;
+    private HashSet<Integer> kingChecks;
 
     protected static final int UP = 1;
     protected static final int DOWN = -1;
@@ -84,6 +85,10 @@ public class Piece {
 
     protected HashSet<SkewerTriplet> getSkewerThreats() {
         return skewerThreats;
+    }
+
+    protected HashSet<Integer> getKingChecks() {
+        return kingChecks;
     }
 
     protected void clear() {

@@ -396,8 +396,25 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         teamPieces.put(newSquare, pieceToMove);
         pieceToMove.setSquare(newSquare);
         teamPieces.remove(oldSquare);
-        if (opponentPieces.containsKey(newSquare)) {
-            opponentPieces.remove(newSquare);
+        if (pieceToMove.getCaptures() != null && pieceToMove.getCaptures().contains(newSquare)) {
+            if (opponentPieces.containsKey(newSquare)) {
+                opponentPieces.remove(newSquare);
+            } else { // en passant
+                if (!(pieceToMove instanceof Pawn)) {
+                    throw new PieceIsNotPawnException("En passant piece is not a pawn");
+                }
+                int diff = Math.abs(newSquare - oldSquare);
+                int directionMultiplier = 1;
+                if (diff < 0) {
+                    directionMultiplier = -1;
+                }
+
+                if (diff == 7) {
+                    opponentPieces.remove(newSquare + directionMultiplier);
+                } else if (diff == 9) {
+                    opponentPieces.remove(newSquare - directionMultiplier);
+                }
+            }
         }
 
         // castle
@@ -450,6 +467,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
+    }
+
+    public class PieceIsNotPawnException extends RuntimeException {
+        public PieceIsNotPawnException(String message) {
+            super(message);
+        }
     }
 
 }
