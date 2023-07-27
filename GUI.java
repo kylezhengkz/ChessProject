@@ -362,7 +362,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
                 implementNewMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
                 repaint();
-
+                
                 int[] move = new int[2];
                 move = currentPosition.searchCpuBestMove();
                 Piece cpuPieceToMove = currentPosition.getCpuPieces().get(move[0]);
