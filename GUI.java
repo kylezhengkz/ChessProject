@@ -362,7 +362,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
                 implementNewMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
                 repaint();
-                
+
                 int[] move = new int[2];
                 move = currentPosition.searchCpuBestMove();
                 Piece cpuPieceToMove = currentPosition.getCpuPieces().get(move[0]);
@@ -428,15 +428,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         // castle
         if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles() != null && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
-            Rook selectedRook;
+            Rook selectedRook = null;
             if (newSquare == 17 || newSquare == 24) {
                 selectedRook = (Rook) teamPieces.get(newSquare - 16);
                 teamPieces.put(newSquare + 8, selectedRook);
                 teamPieces.remove(newSquare - 16);
+                selectedRook.setSquare(newSquare + 8);
             } else if (newSquare == 49 || newSquare == 56) {
                 selectedRook = (Rook) teamPieces.get(newSquare + 8);
                 teamPieces.put(newSquare - 8, selectedRook);
                 teamPieces.remove(newSquare + 8);
+                selectedRook.setSquare(newSquare - 8);
             }
         }
 

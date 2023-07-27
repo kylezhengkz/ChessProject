@@ -92,9 +92,7 @@ public class PositionNode {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
-        System.out.println("USER CHECK");
         for (int square : userPieces.keySet()) {
-            System.out.println(square);
             Piece userPiece = userPieces.get(square);
             if (userPiece instanceof Pawn) {
                 ((Pawn) userPiece).generateMoves(userPieces, cpuPieces, unsafeSquares);
@@ -116,7 +114,6 @@ public class PositionNode {
             Piece cpuPiece = cpuPieces.get(square);
 
             if (cpuPiece instanceof Pawn) {
-                System.out.println("HANG ON: " + (userPieces.containsKey(12)));
                 ((Pawn) cpuPiece).generateMoves(cpuPieces, userPieces, controlledSquares);
             } else if (cpuPiece instanceof Knight) {
                 ((Knight) cpuPiece).generateMoves(cpuPieces, userPieces, controlledSquares);
@@ -216,12 +213,8 @@ public class PositionNode {
     }
 
     private Double evaluateTrade(int tradingSquare, double initialCaptureVal, List<Piece> teamPieces, List<Piece> opponentPieces) {
-        System.out.println("EVALUATE"); 
         List<Piece> teamPiecesCopy = new ArrayList<>(teamPieces);
         List<Piece> opponentPiecesCopy = new ArrayList<>(opponentPieces);
-
-        System.out.println("MY BACKUP: " + teamPiecesCopy.size());
-        System.out.println("THEIR TAKEBACKS: " + opponentPiecesCopy.size());
 
         double captureVal = initialCaptureVal;
         while (true) {

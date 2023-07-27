@@ -89,27 +89,19 @@ public class Pawn extends Piece {
             }
 
             // en passant
-            System.out.println("Initial square: " + getSquare());
-            System.out.println("New square: " + (getSquare() + LEFT * directionMultiplier));
             if (validMove(getSquare(), LEFT * directionMultiplier)) {
-                System.out.println("CHECK 1");
                 checkSquare = getSquare() + LEFT * directionMultiplier;
-                System.out.println("CHECK: " + checkSquare);
                 if (opponentPieces.containsKey(checkSquare) && opponentPieces.get(checkSquare) instanceof Pawn) {
-                    System.out.println("CHECK 2");
                     Pawn opponentPawn = (Pawn) opponentPieces.get(checkSquare);
                     if (opponentPawn.pawnJustMovedTwoSquares) {
-                        System.out.println("CHECK 3");
                         addPossibleMove(checkSquare + UP * directionMultiplier, 0);
                         addCapture(checkSquare + UP * directionMultiplier);
                     }
                 } else {
                     if (!opponentPieces.containsKey(checkSquare)) {
-                        System.out.println("ERR 1");
                     }
 
                     if (!(opponentPieces.get(checkSquare) instanceof Pawn)) {
-                        System.out.println("ERR 2");
                     }
                 }
             }
@@ -130,17 +122,12 @@ public class Pawn extends Piece {
                 }
             }
 
-            // System.out.println("NEW");
-
             // en passant
             if (validMove(getSquare(), RIGHT * directionMultiplier)) {
-                // System.out.println("CHECK 1");
                 checkSquare = getSquare() + RIGHT * directionMultiplier;
                 if (opponentPieces.containsKey(checkSquare) && opponentPieces.get(checkSquare) instanceof Pawn) {
-                    // System.out.println("CHECK 2");
                     Pawn opponentPawn = (Pawn) opponentPieces.get(checkSquare);
                     if (opponentPawn.pawnJustMovedTwoSquares) {
-                        // System.out.println("CHECK 3");
                         addPossibleMove(checkSquare + UP * directionMultiplier, 0);
                         addCapture(checkSquare + UP * directionMultiplier);
                     }
