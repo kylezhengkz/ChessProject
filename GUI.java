@@ -83,10 +83,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         g.setColor(myDarkGreen);
                     }
 
+                    /*
                     int curSquare = coorToSquare(x, y);
                     if (controlledStuff.contains(curSquare)) {
                         g.setColor(Color.BLUE);
                     }
+                    */
 
                     g.fillRect(x, y, TILESIZE, TILESIZE);
                 }

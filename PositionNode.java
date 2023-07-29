@@ -26,8 +26,7 @@ public class PositionNode {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
-        for (int square : cpuPieces.keySet()) {
-            Piece cpuPiece = cpuPieces.get(square);
+        for (Piece cpuPiece : cpuPieces.values()) {
             if (cpuPiece instanceof Pawn) {
                 ((Pawn) cpuPiece).generateMoves(cpuPieces, userPieces, unsafeSquares);
             } else if (cpuPiece instanceof Knight) {
@@ -44,9 +43,7 @@ public class PositionNode {
         }
 
         King userKing = null; // init
-        for (int square : userPieces.keySet()) {
-            Piece userPiece = userPieces.get(square);
-
+        for (Piece userPiece : userPieces.values()) {
             if (userPiece instanceof Pawn) {
                 ((Pawn) userPiece).generateMoves(userPieces, cpuPieces, controlledSquares);
             } else if (userPiece instanceof Knight) {
@@ -243,7 +240,13 @@ public class PositionNode {
         }
 
         return captureVal;
-
     }
+
+    /*
+    private Double staticEvaluation(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+        double staticEval = 0;
+        for ()
+    }
+    */
 
 }
