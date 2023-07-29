@@ -85,7 +85,7 @@ public class StartGame {
             userStartingPosition.put(40, new King(13, 40, GlobalConstants.BLACK));
         }
 
-        PositionNode startingPosition = new PositionNode(userStartingPosition, cpuStartingPosition);
+        PositionNode startingPosition = new PositionNode(userStartingPosition, cpuStartingPosition, 0);
         return startingPosition;
     }
 
