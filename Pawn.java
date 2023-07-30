@@ -3,20 +3,24 @@ import java.util.*;
 public class Pawn extends Piece {
 
     private boolean stationaryStatus; // true if pawn has not moved yet
-    private boolean pawnJustMovedTwoSquares; // true if pawn just moved two squares forward
+    private boolean doubleSquareStart; // true if pawn moved two squares forward
+    private boolean enPassantLeft; // true if pawn is eligible to perform en passant (left)
+    private boolean enPassantRight; // true if pawn is eligible to perform en passant (right)
 
     Pawn(double value, int square, int color) {
         super(value, square, color);
         stationaryStatus = true;
-        pawnJustMovedTwoSquares = false;
+        doubleSquareStart = false;
+        enPassantLeft = false;
+        enPassantRight = false;
     }
 
     protected boolean getStationaryStatus() {
         return stationaryStatus;
     }
 
-    protected boolean didPawnJustMoveTwoSquares() {
-        return pawnJustMovedTwoSquares;
+    protected boolean didPawnMoveTwoSquares() {
+        return doubleSquareStart;
     }
 
     protected void movePawn() {
@@ -24,11 +28,23 @@ public class Pawn extends Piece {
     }
 
     protected void moveTwoSquares() {
-        pawnJustMovedTwoSquares = true;
+        doubleSquareStart = true;
     }
 
-    protected void changeJustMoveStatus() {
-        pawnJustMovedTwoSquares = false;
+    protected void setEnPassantLeft(boolean status) {
+        enPassantLeft = status;
+    }
+
+    protected void setEnPassantRight(boolean status) {
+        enPassantRight = status;
+    }
+
+    protected boolean getEnPassantLeft() {
+        return enPassantLeft;
+    }
+
+    protected boolean getEnPassantRight() {
+        return enPassantRight;
     }
 
     @Override
@@ -88,22 +104,11 @@ public class Pawn extends Piece {
                 }
             }
 
-            // en passant
-            if (validMove(getSquare(), LEFT * directionMultiplier)) {
-                checkSquare = getSquare() + LEFT * directionMultiplier;
-                if (opponentPieces.containsKey(checkSquare) && opponentPieces.get(checkSquare) instanceof Pawn) {
-                    Pawn opponentPawn = (Pawn) opponentPieces.get(checkSquare);
-                    if (opponentPawn.pawnJustMovedTwoSquares) {
-                        addPossibleMove(checkSquare + UP * directionMultiplier, 0);
-                        addCapture(checkSquare + UP * directionMultiplier);
-                    }
-                } else {
-                    if (!opponentPieces.containsKey(checkSquare)) {
-                    }
-
-                    if (!(opponentPieces.get(checkSquare) instanceof Pawn)) {
-                    }
-                }
+            // en passant left
+            if (enPassantLeft) {
+                addPossibleMove(checkSquare + UP_LEFT*directionMultiplier, 0);
+                addCapture(checkSquare + UP_LEFT*directionMultiplier);
+                setEnPassantLeft(false);
             }
         }
 
@@ -122,16 +127,11 @@ public class Pawn extends Piece {
                 }
             }
 
-            // en passant
-            if (validMove(getSquare(), RIGHT * directionMultiplier)) {
-                checkSquare = getSquare() + RIGHT * directionMultiplier;
-                if (opponentPieces.containsKey(checkSquare) && opponentPieces.get(checkSquare) instanceof Pawn) {
-                    Pawn opponentPawn = (Pawn) opponentPieces.get(checkSquare);
-                    if (opponentPawn.pawnJustMovedTwoSquares) {
-                        addPossibleMove(checkSquare + UP * directionMultiplier, 0);
-                        addCapture(checkSquare + UP * directionMultiplier);
-                    }
-                }
+            // en passant right
+            if (enPassantRight) {
+                addPossibleMove(checkSquare + UP_RIGHT*directionMultiplier, 0);
+                addCapture(checkSquare + UP_RIGHT*directionMultiplier);
+                setEnPassantRight(false);
             }
         }
     }

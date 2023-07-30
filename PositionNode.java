@@ -6,8 +6,6 @@ public class PositionNode {
     private List<PositionNode> children;
     private double moveOrderPriority;
 
-    private static Pawn prevPawn = null;
-
     PositionNode(HashMap<Integer, Piece> myPieces, HashMap<Integer, Piece> opponentPieces, double moveOrderPriority) {
         this.userPieces = myPieces;
         this.cpuPieces = opponentPieces;
@@ -38,7 +36,7 @@ public class PositionNode {
         return children;
     }
 
-    protected void generateUserPossibleMoves(HashSet<Integer> controlledStuff) {
+    protected void generateUserPossibleMoves() {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
@@ -81,8 +79,6 @@ public class PositionNode {
             if (controlledSquares.get(key) == null) {
                 continue;
             }
-            controlledStuff.add(key);
-            ;
         }
 
         if (userKing != null && !unsafeSquares.containsKey(userKing.getSquare())) {
@@ -321,16 +317,18 @@ public class PositionNode {
         HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
         HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
 
-        // update any statuses
-        if (prevPawn != null) {
-            prevPawn.changeJustMoveStatus();
-        }
-
         if (newCpuPieceToMove instanceof Pawn) {
             ((Pawn) newCpuPieceToMove).movePawn();
             if ((newSquare - newCpuPieceToMove.getSquare()) == 2) {
                 ((Pawn) newCpuPieceToMove).moveTwoSquares();
-                prevPawn = (Pawn) newCpuPieceToMove;
+                int checkOpponentSquare = newCpuPieceToMove.getSquare() + Piece.LEFT;
+                if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
+                    ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
+                }
+                checkOpponentSquare = newCpuPieceToMove.getSquare() + Piece.RIGHT;
+                if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
+                    ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
+                }
             }
         } else if (newCpuPieceToMove instanceof King) {
             ((King) newCpuPieceToMove).moveKing();

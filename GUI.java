@@ -29,12 +29,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
     private static boolean userTurn;
 
-    // TO-DO
-    private static Pawn prevPawn;
-
-    // TEMPORARY
-    private static HashSet<Integer> controlledStuff = new HashSet<>();
-
     public GUI(int userColor) {
         setTitle("My Chess Engine");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,13 +70,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                         g.setColor(myDarkGreen);
                     }
 
-                    /*
-                    int curSquare = coorToSquare(x, y);
-                    if (controlledStuff.contains(curSquare)) {
-                        g.setColor(Color.BLUE);
-                    }
-                    */
-
                     g.fillRect(x, y, TILESIZE, TILESIZE);
                 }
             }
@@ -100,96 +87,120 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhitePawn.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackPawn.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Knight) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKnight.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKnight.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Bishop) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteBishop.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackBishop.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Rook) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteRook.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackRook.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Queen) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteQueen.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackQueen.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof King) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKing.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKing.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 }
@@ -207,96 +218,120 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhitePawn.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackPawn.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Knight) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKnight.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKnight.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Bishop) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteBishop.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackBishop.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Rook) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteRook.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackRook.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof Queen) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteQueen.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackQueen.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 } else if (userPiece instanceof King) {
                     if (userPiece.getColor() == GlobalConstants.WHITE) {
                         ImageIcon imageIcon = new ImageIcon("Images/WhiteKing.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     } else {
                         ImageIcon imageIcon = new ImageIcon("Images/BlackKing.png");
                         if (drag && (square == dragSquare)) {
-                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), dragX - ADJUSTDRAGX, dragY - ADJUSTDRAGY, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         } else {
-                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH, IMAGEHEIGHT, this);
+                            g.drawImage(imageIcon.getImage(), coor[0] + ADJUSTIMAGE, coor[1] + ADJUSTIMAGE, IMAGEWIDTH,
+                                    IMAGEHEIGHT, this);
                         }
                     }
                 }
@@ -337,6 +372,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             if (currentPosition.getUserPieces().containsKey(dragSquare)) {
                 dragPiece = currentPosition.getUserPieces().get(dragSquare);
                 drag = true;
+            } else {
+                System.out.println("DRAG SQUARE: " + dragSquare);
+                for (int square : currentPosition.getUserPieces().keySet()) {
+                    System.out.println(square);
+                }
             }
         }
     }
@@ -356,13 +396,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             mouseX = e.getX();
             mouseY = e.getY();
             int newSquare = coorToSquare(mouseX, mouseY);
-            controlledStuff.clear();
-            currentPosition.generateUserPossibleMoves(controlledStuff);
+            currentPosition.generateUserPossibleMoves();
 
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
                 implementUserMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
                 repaint();
                 currentPosition.searchCpuBestMove();
+                userTurn = true;
                 repaint();
             } else {
                 dragPiece = null;
@@ -378,13 +418,21 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
     }
 
-    private void implementUserMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+    private void implementUserMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces,
+            HashMap<Integer, Piece> opponentPieces) {
         // update any statuses
         if (pieceToMove instanceof Pawn) {
             ((Pawn) pieceToMove).movePawn();
             if ((newSquare - oldSquare) == 2) {
                 ((Pawn) pieceToMove).moveTwoSquares();
-                prevPawn = (Pawn) pieceToMove;
+                int checkOpponentSquare = pieceToMove.getSquare() + Piece.LEFT;
+                if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
+                    ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
+                }
+                checkOpponentSquare = pieceToMove.getSquare() + Piece.RIGHT;
+                if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
+                    ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
+                }
             }
         } else if (pieceToMove instanceof King) {
             ((King) pieceToMove).moveKing();
@@ -417,7 +465,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         // castle
-        if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles() != null && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
+        if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles() != null
+                && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook = null;
             if (newSquare == 17 || newSquare == 24) {
                 selectedRook = (Rook) teamPieces.get(newSquare - 16);
@@ -434,24 +483,10 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
 
         currentPosition.clearMoves();
 
-        if (userTurn) {
-            dragPiece = null;
-            dragSquare = -1;
-            drag = false;
-            if (cpuPawnJustMovedTwoSquares) {
-                prevCpuPawn.changeJustMoveStatus();
-                prevCpuPawn = null;
-                cpuPawnJustMovedTwoSquares = false;
-            }
-            userTurn = false;
-        } else {
-            if (userPawnJustMovedTwoSquares) {
-                prevUserPawn.changeJustMoveStatus();
-                prevUserPawn = null;
-                userPawnJustMovedTwoSquares = false;
-            }
-            userTurn = true;
-        }
+        dragPiece = null;
+        dragSquare = -1;
+        drag = false;
+        userTurn = false;
     }
 
     @Override
