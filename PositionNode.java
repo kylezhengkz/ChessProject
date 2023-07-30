@@ -103,7 +103,7 @@ public class PositionNode {
         double bestEval = 999;
         branchNewMoves(cpuPieces, userPieces);
         for (PositionNode child : getChildren()) {
-            double eval = alphaBetaPruning(child, 1, 0, 0, false);
+            double eval = alphaBetaPruning(child, 1, 0, 0, true);
             if (eval < bestEval) {
                 bestPosition = child;
             }

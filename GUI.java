@@ -372,11 +372,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             if (currentPosition.getUserPieces().containsKey(dragSquare)) {
                 dragPiece = currentPosition.getUserPieces().get(dragSquare);
                 drag = true;
-            } else {
-                System.out.println("DRAG SQUARE: " + dragSquare);
-                for (int square : currentPosition.getUserPieces().keySet()) {
-                    System.out.println(square);
-                }
             }
         }
     }
@@ -401,7 +396,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
                 implementUserMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
                 repaint();
+                /* 
+                System.out.println("BEFORE");
+                for (int square : currentPosition.getUserPieces().keySet()) {
+                    System.out.println(square);
+                }
+                */
                 currentPosition.searchCpuBestMove();
+                /* 
+                System.out.println("AFTER");
+                for (int square : currentPosition.getUserPieces().keySet()) {
+                    System.out.println(square);
+                }
+                */
                 userTurn = true;
                 repaint();
             } else {
