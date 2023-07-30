@@ -103,13 +103,14 @@ public class PositionNode {
     protected void searchCpuBestMove() {
         PositionNode bestPosition = null;
         double bestEval = 999;
+        branchNewMoves(cpuPieces, userPieces);
         for (PositionNode child : getChildren()) {
             double eval = alphaBetaPruning(child, 1, 0, 0, false);
             if (eval < bestEval) {
                 bestPosition = child;
             }
         }
-    
+
         setUserPieces(bestPosition.getUserPieces());
         setCpuPieces(bestPosition.getCpuPieces());
     }
@@ -117,9 +118,11 @@ public class PositionNode {
     private Double alphaBetaPruning(PositionNode currentPosition, int depth, double alpha, double beta, boolean maximizingUser) {
         if (depth == 0) {
             if (maximizingUser) {
-                return staticEvaluation(currentPosition.getUserPieces(), currentPosition.getCpuPieces());
+                double staticEval = staticEvaluation(currentPosition.getUserPieces(), currentPosition.getCpuPieces());
+                return staticEval;
             } else {
-                return staticEvaluation(currentPosition.getCpuPieces(), currentPosition.getUserPieces());
+                double staticEval = staticEvaluation(currentPosition.getCpuPieces(), currentPosition.getUserPieces());
+                return staticEval;
             }
         }
 
@@ -140,8 +143,8 @@ public class PositionNode {
             currentPosition.branchNewMoves(cpuPieces, userPieces);
             for (PositionNode child : currentPosition.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, true);
-                beta = Math.max(minEval, eval);
-                alpha = Math.max(beta, eval);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, eval);
                 if (beta <= alpha) {
                     break;
                 }
@@ -154,57 +157,57 @@ public class PositionNode {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
-        for (int square : teamPieces.keySet()) {
-            Piece teamPiece = teamPieces.get(square);
-            if (teamPiece instanceof Pawn) {
-                ((Pawn) teamPiece).generateMoves(teamPieces, opponentPieces, unsafeSquares);
-            } else if (teamPiece instanceof Knight) {
-                ((Knight) teamPiece).generateMoves(teamPieces, opponentPieces, unsafeSquares);
-            } else if (teamPiece instanceof Bishop) {
-                ((Bishop) teamPiece).generateMoves(teamPieces, opponentPieces, unsafeSquares);
-            } else if (teamPiece instanceof Rook) {
-                ((Rook) teamPiece).generateMoves(teamPieces, opponentPieces, unsafeSquares);
-            } else if (teamPiece instanceof Queen) {
-                ((Queen) teamPiece).generateMoves(teamPieces, opponentPieces, unsafeSquares);
-            } else if (teamPiece instanceof King) {
-                ((King) teamPiece).generateMoves(teamPieces, opponentPieces, unsafeSquares, controlledSquares);
+        for (int square : opponentPieces.keySet()) {
+            Piece opponentPiece = opponentPieces.get(square);
+            if (opponentPiece instanceof Pawn) {
+                ((Pawn) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Knight) {
+                ((Knight) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Bishop) {
+                ((Bishop) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Rook) {
+                ((Rook) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Queen) {
+                ((Queen) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof King) {
+                ((King) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares, controlledSquares);
             }
         }
 
         King teamKing = null; // init
-        for (int square : opponentPieces.keySet()) {
-            Piece opponentPiece = opponentPieces.get(square);
+        for (int square : teamPieces.keySet()) {
+            Piece teamPiece = teamPieces.get(square);
 
-            if (opponentPiece instanceof Pawn) {
-                ((Pawn) opponentPiece).generateMoves(opponentPieces, teamPieces, controlledSquares);
-            } else if (opponentPiece instanceof Knight) {
-                ((Knight) opponentPiece).generateMoves(opponentPieces, teamPieces, controlledSquares);
-            } else if (opponentPiece instanceof Bishop) {
-                ((Bishop) opponentPiece).generateMoves(opponentPieces, teamPieces, controlledSquares);
-            } else if (opponentPiece instanceof Rook) {
-                ((Rook) opponentPiece).generateMoves(opponentPieces, teamPieces, controlledSquares);
-            } else if (opponentPiece instanceof Queen) {
-                ((Queen) opponentPiece).generateMoves(opponentPieces, teamPieces, controlledSquares);
-            } else if (opponentPiece instanceof King) {
-                teamKing = (King) opponentPiece;
-                teamKing.generateMoves(opponentPieces, teamPieces, controlledSquares, unsafeSquares);
+            if (teamPiece instanceof Pawn) {
+                ((Pawn) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Knight) {
+                ((Knight) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Bishop) {
+                ((Bishop) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Rook) {
+                ((Rook) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Queen) {
+                ((Queen) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof King) {
+                teamKing = (King) teamPiece;
+                teamKing.generateMoves(teamPieces, opponentPieces, controlledSquares, unsafeSquares);
             }
         }
 
         if (teamKing != null && !unsafeSquares.containsKey(teamKing.getSquare())) {
-            teamKing.checkCastle(opponentPieces, teamPieces, unsafeSquares);
+            teamKing.checkCastle(teamPieces, opponentPieces, unsafeSquares);
         }
 
         // evaluate captures
-        for (int square : opponentPieces.keySet()) {
-            Piece opponentPiece = opponentPieces.get(square);
-            if (opponentPiece.getCaptures() == null) {
+        for (int square : teamPieces.keySet()) {
+            Piece teamPiece = teamPieces.get(square);
+            if (teamPiece.getCaptures() == null) {
                 continue;
             }
-            for (int captureSquare : opponentPiece.getCaptures()) {
+            for (int captureSquare : teamPiece.getCaptures()) {
                 double initialCaptureVal = 0;
-                if (teamPieces.containsKey(captureSquare)) {
-                    initialCaptureVal = teamPieces.get(captureSquare).getValue();
+                if (opponentPieces.containsKey(captureSquare)) {
+                    initialCaptureVal = opponentPieces.get(captureSquare).getValue();
                 } else {
                     int diff = Math.abs(captureSquare - square);
                     int directionMultiplier = 1;
@@ -213,9 +216,9 @@ public class PositionNode {
                     }
 
                     if (diff == 7) {
-                        initialCaptureVal = teamPieces.get(captureSquare + directionMultiplier).getValue();
+                        initialCaptureVal = opponentPieces.get(captureSquare + directionMultiplier).getValue();
                     } else if (diff == 9) {
-                        initialCaptureVal = teamPieces.get(captureSquare - directionMultiplier).getValue();
+                        initialCaptureVal = opponentPieces.get(captureSquare - directionMultiplier).getValue();
                     }
                 }
                 double captureVal = 0;
@@ -225,26 +228,11 @@ public class PositionNode {
                     captureVal = evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare),
                             unsafeSquares.get(captureSquare)) + 0.1;
                 }
-                opponentPiece.getPossibleMoves().put(captureSquare, captureVal);
+                teamPiece.getPossibleMoves().put(captureSquare, captureVal);
             }
         }
-        /*
-         * HashSet<Piece> unsafePieces;
-         * // evaluate attacks and generate unsafe pieces
-         * for (int opponentSquare : teamPieces.keySet()) {
-         * Piece teamPiece = teamPieces.get(opponentSquare);
-         * teamPiece.searchLongRangeThreats(); // add value
-         * teamPiece.searchShortRangeThreats(); // add value
-         * if (teamPiece.getCaptures() == null) {
-         * continue;
-         * }
-         * 
-         * 
-         * for (int captureSquare : teamPiece.getCaptures()) {
-         * // evaluate capture and add unsafe piece if captureVal > 0
-         * }
-         * }
-         */
+
+        // short range and long range attacks
 
         // unsafe piece evasions
 
@@ -254,16 +242,17 @@ public class PositionNode {
 
         // add children nodes
 
-        for (Piece opponentPiece : opponentPieces.values()) {
-            if (opponentPiece.getPossibleMoves() == null) {
+        for (Piece teamPiece : teamPieces.values()) {
+            if (teamPiece.getPossibleMoves() == null) {
                 continue;
             }
 
-            for (int newSquare : opponentPiece.getPossibleMoves().keySet()) {
-                double moveVal = opponentPiece.getPossibleMoves().get(newSquare);
-                addChild(opponentPiece, newSquare, moveVal, teamPieces, opponentPieces);
+            for (int newSquare : teamPiece.getPossibleMoves().keySet()) {
+                double moveVal = teamPiece.getPossibleMoves().get(newSquare);
+                addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces);
             }
         }
+
     }
 
     private Double evaluateTrade(int tradingSquare, double initialCaptureVal, List<Piece> teamPieces,
@@ -289,7 +278,8 @@ public class PositionNode {
                 break;
             }
 
-            if (opponentPiecesCopy.size() == 1 || (teamPiecesCopy.get(1).getValue() <= opponentPiecesCopy.get(1).getValue())) {
+            if (opponentPiecesCopy.size() == 1
+                    || (teamPiecesCopy.get(1).getValue() <= opponentPiecesCopy.get(1).getValue())) {
                 captureVal += opponentPiecesCopy.get(0).getValue();
                 opponentPiecesCopy.remove(0);
             } else { // team should not capture back
@@ -313,15 +303,37 @@ public class PositionNode {
         return staticEval;
     }
 
+    private HashMap<Integer, Piece> deepCopyPieces(HashMap<Integer, Piece> pieces) {
+        HashMap<Integer, Piece> newPieces = new HashMap<>();
+        for (Map.Entry<Integer, Piece> entry : pieces.entrySet()) {
+            int key = entry.getKey();
+            Piece originalPiece = entry.getValue();
+            Piece newPiece = originalPiece.clone();
+            newPieces.put(key, newPiece);
+        }
+        return newPieces;
+    }
+
     private void addChild(Piece cpuPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
-        teamPieces.put(newSquare, cpuPieceToMove);
-        teamPieces.remove(cpuPieceToMove.getSquare());
-        cpuPieceToMove.setSquare(newSquare);
-        if (cpuPieceToMove.getCaptures() != null && cpuPieceToMove.getCaptures().contains(newSquare)) {
+        
+        Piece newCpuPieceToMove = cpuPieceToMove.clone();
+        HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
+        HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
+
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+
+        PositionNode newChild = new PositionNode(newTeamPieces, newOpponentPieces, moveOrderPriority);
+        newTeamPieces.put(newSquare, newCpuPieceToMove);
+        newTeamPieces.remove(newCpuPieceToMove.getSquare());
+        newCpuPieceToMove.setSquare(newSquare);
+
+        if (newCpuPieceToMove.getCaptures() != null && newCpuPieceToMove.getCaptures().contains(newSquare)) {
             if (opponentPieces.containsKey(newSquare)) {
                 opponentPieces.remove(newSquare);
             } else { // en passant
-                int diff = Math.abs(newSquare - cpuPieceToMove.getSquare());
+                int diff = Math.abs(newSquare - newCpuPieceToMove.getSquare());
                 int directionMultiplier = 1;
                 if (diff < 0) {
                     directionMultiplier = -1;
@@ -336,8 +348,7 @@ public class PositionNode {
         }
 
         // castle
-        if (cpuPieceToMove instanceof King && ((King) cpuPieceToMove).getPossibleCastles() != null
-                && ((King) cpuPieceToMove).getPossibleCastles().contains(newSquare)) {
+        if (newCpuPieceToMove instanceof King && ((King) newCpuPieceToMove).getPossibleCastles() != null && ((King) newCpuPieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook = null;
             if (newSquare == 17 || newSquare == 24) {
                 selectedRook = (Rook) teamPieces.get(newSquare - 16);
@@ -351,8 +362,6 @@ public class PositionNode {
                 selectedRook.setSquare(newSquare - 8);
             }
         }
-
-        PositionNode newChild = new PositionNode(teamPieces, opponentPieces, moveOrderPriority);
 
         int low = 0;
         int high = children.size() - 1;
@@ -371,7 +380,7 @@ public class PositionNode {
             }
         }
 
-        if (inserted) {
+        if (!inserted) {
             children.add(low, newChild);
         }
     }

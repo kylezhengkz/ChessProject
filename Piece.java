@@ -1,5 +1,5 @@
 import java.util.*;
-public class Piece {
+public class Piece implements Cloneable {
 
     private double value;
     private int square;
@@ -135,6 +135,16 @@ public class Piece {
             }
         }
         return true;
+    }
+
+    @Override
+    public Piece clone() {
+        try {
+            Piece clonedPiece = (Piece) super.clone();
+            return clonedPiece;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Cloning not supported for Piece.");
+        }
     }
 
 }
