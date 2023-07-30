@@ -6,9 +6,9 @@ public class PositionNode {
     private List<PositionNode> children;
     private double moveOrderPriority;
 
-    PositionNode(HashMap<Integer, Piece> myPieces, HashMap<Integer, Piece> opponentPieces, double moveOrderPriority) {
-        this.userPieces = myPieces;
-        this.cpuPieces = opponentPieces;
+    PositionNode(HashMap<Integer, Piece> userPieces, HashMap<Integer, Piece> cpuPieces, double moveOrderPriority) {
+        this.userPieces = userPieces;
+        this.cpuPieces = cpuPieces;
         this.moveOrderPriority = moveOrderPriority;
     }
 
@@ -101,6 +101,8 @@ public class PositionNode {
     protected void searchCpuBestMove() {
         PositionNode bestPosition = null;
         double bestEval = 999;
+
+        System.out.println("BRANCH CPU");
         branchNewMoves(cpuPieces, userPieces);
         for (PositionNode child : getChildren()) {
             double eval = alphaBetaPruning(child, 1, 0, 0, true);
@@ -312,28 +314,28 @@ public class PositionNode {
         return newPieces;
     }
 
-    private void addChild(Piece cpuPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
-        Piece newCpuPieceToMove = cpuPieceToMove.clone();
+    private void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+        Piece newTeamPieceToMove = teamPieceToMove.clone();
         HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
         HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
 
-        if (newCpuPieceToMove instanceof Pawn) {
-            ((Pawn) newCpuPieceToMove).movePawn();
-            if ((newSquare - newCpuPieceToMove.getSquare()) == 2) {
-                ((Pawn) newCpuPieceToMove).moveTwoSquares();
-                int checkOpponentSquare = newCpuPieceToMove.getSquare() + Piece.LEFT;
+        if (newTeamPieceToMove instanceof Pawn) {
+            ((Pawn) newTeamPieceToMove).movePawn();
+            if ((newSquare - newTeamPieceToMove.getSquare()) == 2) {
+                ((Pawn) newTeamPieceToMove).moveTwoSquares();
+                int checkOpponentSquare = newTeamPieceToMove.getSquare() + Piece.LEFT;
                 if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
                     ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
                 }
-                checkOpponentSquare = newCpuPieceToMove.getSquare() + Piece.RIGHT;
+                checkOpponentSquare = newTeamPieceToMove.getSquare() + Piece.RIGHT;
                 if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
                     ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
                 }
             }
-        } else if (newCpuPieceToMove instanceof King) {
-            ((King) newCpuPieceToMove).moveKing();
-        } else if (newCpuPieceToMove instanceof Rook) {
-            ((Rook) newCpuPieceToMove).moveRook();
+        } else if (newTeamPieceToMove instanceof King) {
+            ((King) newTeamPieceToMove).moveKing();
+        } else if (newTeamPieceToMove instanceof Rook) {
+            ((Rook) newTeamPieceToMove).moveRook();
         }
 
         if (children == null) {
@@ -341,15 +343,15 @@ public class PositionNode {
         }
 
         PositionNode newChild = new PositionNode(newTeamPieces, newOpponentPieces, moveOrderPriority);
-        newTeamPieces.put(newSquare, newCpuPieceToMove);
-        newTeamPieces.remove(newCpuPieceToMove.getSquare());
-        newCpuPieceToMove.setSquare(newSquare);
+        newTeamPieces.put(newSquare, newTeamPieceToMove);
+        newTeamPieces.remove(newTeamPieceToMove.getSquare());
+        newTeamPieceToMove.setSquare(newSquare);
 
-        if (newCpuPieceToMove.getCaptures() != null && newCpuPieceToMove.getCaptures().contains(newSquare)) {
+        if (newTeamPieceToMove.getCaptures() != null && newTeamPieceToMove.getCaptures().contains(newSquare)) {
             if (opponentPieces.containsKey(newSquare)) {
                 opponentPieces.remove(newSquare);
             } else { // en passant
-                int diff = Math.abs(newSquare - newCpuPieceToMove.getSquare());
+                int diff = Math.abs(newSquare - newTeamPieceToMove.getSquare());
                 int directionMultiplier = 1;
                 if (diff < 0) {
                     directionMultiplier = -1;
@@ -364,7 +366,7 @@ public class PositionNode {
         }
 
         // castle
-        if (newCpuPieceToMove instanceof King && ((King) newCpuPieceToMove).getPossibleCastles() != null && ((King) newCpuPieceToMove).getPossibleCastles().contains(newSquare)) {
+        if (newTeamPieceToMove instanceof King && ((King) newTeamPieceToMove).getPossibleCastles() != null && ((King) newTeamPieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook = null;
             if (newSquare == 17 || newSquare == 24) {
                 selectedRook = (Rook) teamPieces.get(newSquare - 16);
