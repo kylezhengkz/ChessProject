@@ -30,11 +30,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
     private static boolean userTurn;
 
     // TO-DO
-    private static boolean userPawnJustMovedTwoSquares = false;
-    private static Pawn prevUserPawn;
-
-    private static boolean cpuPawnJustMovedTwoSquares = false;
-    private static Pawn prevCpuPawn;
+    private static Pawn prevPawn;
 
     // TEMPORARY
     private static HashSet<Integer> controlledStuff = new HashSet<>();
@@ -364,9 +360,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             currentPosition.generateUserPossibleMoves(controlledStuff);
 
             if ((newSquare != dragSquare) && (dragPiece.getPossibleMoves() != null) && (dragPiece.getPossibleMoves().containsKey(newSquare))) {
-                implementNewMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
+                implementUserMove(dragPiece, dragSquare, newSquare, currentPosition.getUserPieces(), currentPosition.getCpuPieces());
                 repaint();
-
                 currentPosition.searchCpuBestMove();
                 repaint();
             } else {
@@ -383,19 +378,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
     }
 
-    private void implementNewMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+    private void implementUserMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
         // update any statuses
         if (pieceToMove instanceof Pawn) {
             ((Pawn) pieceToMove).movePawn();
             if ((newSquare - oldSquare) == 2) {
                 ((Pawn) pieceToMove).moveTwoSquares();
-                if (userTurn) {
-                    userPawnJustMovedTwoSquares = true;
-                    prevUserPawn = ((Pawn) pieceToMove);
-                } else {
-                    cpuPawnJustMovedTwoSquares = true;
-                    prevCpuPawn = ((Pawn) pieceToMove);
-                }
+                prevPawn = (Pawn) pieceToMove;
             }
         } else if (pieceToMove instanceof King) {
             ((King) pieceToMove).moveKing();

@@ -6,6 +6,8 @@ public class PositionNode {
     private List<PositionNode> children;
     private double moveOrderPriority;
 
+    private static Pawn prevPawn = null;
+
     PositionNode(HashMap<Integer, Piece> myPieces, HashMap<Integer, Piece> opponentPieces, double moveOrderPriority) {
         this.userPieces = myPieces;
         this.cpuPieces = opponentPieces;
@@ -315,10 +317,26 @@ public class PositionNode {
     }
 
     private void addChild(Piece cpuPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
-        
         Piece newCpuPieceToMove = cpuPieceToMove.clone();
         HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
         HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
+
+        // update any statuses
+        if (prevPawn != null) {
+            prevPawn.changeJustMoveStatus();
+        }
+
+        if (newCpuPieceToMove instanceof Pawn) {
+            ((Pawn) newCpuPieceToMove).movePawn();
+            if ((newSquare - newCpuPieceToMove.getSquare()) == 2) {
+                ((Pawn) newCpuPieceToMove).moveTwoSquares();
+                prevPawn = (Pawn) newCpuPieceToMove;
+            }
+        } else if (newCpuPieceToMove instanceof King) {
+            ((King) newCpuPieceToMove).moveKing();
+        } else if (newCpuPieceToMove instanceof Rook) {
+            ((Rook) newCpuPieceToMove).moveRook();
+        }
 
         if (children == null) {
             children = new ArrayList<>();
