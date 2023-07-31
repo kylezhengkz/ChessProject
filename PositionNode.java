@@ -74,13 +74,6 @@ public class PositionNode {
             }
         }
 
-        // TEMPORARY
-        for (int key : controlledSquares.keySet()) {
-            if (controlledSquares.get(key) == null) {
-                continue;
-            }
-        }
-
         if (userKing != null && !unsafeSquares.containsKey(userKing.getSquare())) {
             userKing.checkCastle(userPieces, cpuPieces, unsafeSquares);
         }
@@ -101,9 +94,10 @@ public class PositionNode {
     protected void searchCpuBestMove() {
         PositionNode bestPosition = null;
         double bestEval = 999;
-
-        System.out.println("BRANCH CPU");
-        branchNewMoves(cpuPieces, userPieces);
+        if (children != null) {
+            children.clear();
+        }
+        branchNewMoves(cpuPieces, userPieces, false);
         for (PositionNode child : getChildren()) {
             double eval = alphaBetaPruning(child, 1, 0, 0, true);
             if (eval < bestEval) {
@@ -113,6 +107,14 @@ public class PositionNode {
 
         setUserPieces(bestPosition.getUserPieces());
         setCpuPieces(bestPosition.getCpuPieces());
+
+        /*
+        System.out.println("RESET");
+        for (int square : cpuPieces.keySet()) {
+            System.out.println(square);
+        }
+        */
+
     }
 
     private Double alphaBetaPruning(PositionNode currentPosition, int depth, double alpha, double beta, boolean maximizingUser) {
@@ -128,7 +130,7 @@ public class PositionNode {
 
         if (maximizingUser) {
             double maxEval = -999;
-            currentPosition.branchNewMoves(userPieces, cpuPieces);
+            currentPosition.branchNewMoves(userPieces, cpuPieces, maximizingUser);
             for (PositionNode child : currentPosition.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, false);
                 maxEval = Math.max(maxEval, eval);
@@ -140,7 +142,7 @@ public class PositionNode {
             return maxEval;
         } else {
             double minEval = 999;
-            currentPosition.branchNewMoves(cpuPieces, userPieces);
+            currentPosition.branchNewMoves(cpuPieces, userPieces, maximizingUser);
             for (PositionNode child : currentPosition.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, true);
                 minEval = Math.min(minEval, eval);
@@ -153,7 +155,7 @@ public class PositionNode {
         }
     }
 
-    protected void branchNewMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+    protected void branchNewMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean maximizingUser) {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
@@ -249,14 +251,13 @@ public class PositionNode {
 
             for (int newSquare : teamPiece.getPossibleMoves().keySet()) {
                 double moveVal = teamPiece.getPossibleMoves().get(newSquare);
-                addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces);
+                addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces, maximizingUser);
             }
         }
 
     }
 
-    private Double evaluateTrade(int tradingSquare, double initialCaptureVal, List<Piece> teamPieces,
-            List<Piece> opponentPieces) {
+    private Double evaluateTrade(int tradingSquare, double initialCaptureVal, List<Piece> teamPieces, List<Piece> opponentPieces) {
         List<Piece> teamPiecesCopy = new ArrayList<>(teamPieces);
         List<Piece> opponentPiecesCopy = new ArrayList<>(opponentPieces);
 
@@ -314,7 +315,7 @@ public class PositionNode {
         return newPieces;
     }
 
-    private void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
+    private void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean maximizingUser) {
         Piece newTeamPieceToMove = teamPieceToMove.clone();
         HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
         HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
@@ -324,12 +325,12 @@ public class PositionNode {
             if ((newSquare - newTeamPieceToMove.getSquare()) == 2) {
                 ((Pawn) newTeamPieceToMove).moveTwoSquares();
                 int checkOpponentSquare = newTeamPieceToMove.getSquare() + Piece.LEFT;
-                if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
-                    ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
+                if (newOpponentPieces.containsKey(checkOpponentSquare) && newOpponentPieces.get(checkOpponentSquare) instanceof Pawn) {
+                    ((Pawn) newOpponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
                 }
                 checkOpponentSquare = newTeamPieceToMove.getSquare() + Piece.RIGHT;
-                if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
-                    ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
+                if (newOpponentPieces.containsKey(checkOpponentSquare) && newOpponentPieces.get(checkOpponentSquare) instanceof Pawn) {
+                    ((Pawn) newOpponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
                 }
             }
         } else if (newTeamPieceToMove instanceof King) {
@@ -342,14 +343,19 @@ public class PositionNode {
             children = new ArrayList<>();
         }
 
-        PositionNode newChild = new PositionNode(newTeamPieces, newOpponentPieces, moveOrderPriority);
+        PositionNode newChild = null;
+        if (maximizingUser) {
+            newChild = new PositionNode(newTeamPieces, newOpponentPieces, moveOrderPriority);
+        } else {
+            newChild = new PositionNode(newOpponentPieces, newTeamPieces, moveOrderPriority);
+        }
         newTeamPieces.put(newSquare, newTeamPieceToMove);
         newTeamPieces.remove(newTeamPieceToMove.getSquare());
         newTeamPieceToMove.setSquare(newSquare);
 
         if (newTeamPieceToMove.getCaptures() != null && newTeamPieceToMove.getCaptures().contains(newSquare)) {
-            if (opponentPieces.containsKey(newSquare)) {
-                opponentPieces.remove(newSquare);
+            if (newOpponentPieces.containsKey(newSquare)) {
+                newOpponentPieces.remove(newSquare);
             } else { // en passant
                 int diff = Math.abs(newSquare - newTeamPieceToMove.getSquare());
                 int directionMultiplier = 1;
@@ -358,9 +364,9 @@ public class PositionNode {
                 }
 
                 if (diff == 7) {
-                    opponentPieces.remove(newSquare + directionMultiplier);
+                    newOpponentPieces.remove(newSquare + directionMultiplier);
                 } else if (diff == 9) {
-                    opponentPieces.remove(newSquare - directionMultiplier);
+                    newOpponentPieces.remove(newSquare - directionMultiplier);
                 }
             }
         }
@@ -369,14 +375,14 @@ public class PositionNode {
         if (newTeamPieceToMove instanceof King && ((King) newTeamPieceToMove).getPossibleCastles() != null && ((King) newTeamPieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook = null;
             if (newSquare == 17 || newSquare == 24) {
-                selectedRook = (Rook) teamPieces.get(newSquare - 16);
-                teamPieces.put(newSquare + 8, selectedRook);
-                teamPieces.remove(newSquare - 16);
+                selectedRook = (Rook) newTeamPieces.get(newSquare - 16);
+                newTeamPieces.put(newSquare + 8, selectedRook);
+                newTeamPieces.remove(newSquare - 16);
                 selectedRook.setSquare(newSquare + 8);
             } else if (newSquare == 49 || newSquare == 56) {
-                selectedRook = (Rook) teamPieces.get(newSquare + 8);
-                teamPieces.put(newSquare - 8, selectedRook);
-                teamPieces.remove(newSquare + 8);
+                selectedRook = (Rook) newTeamPieces.get(newSquare + 8);
+                newTeamPieces.put(newSquare - 8, selectedRook);
+                newTeamPieces.remove(newSquare + 8);
                 selectedRook.setSquare(newSquare - 8);
             }
         }
