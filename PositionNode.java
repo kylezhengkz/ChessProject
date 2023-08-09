@@ -227,8 +227,12 @@ public class PositionNode {
                 if (unsafeSquares.get(captureSquare) == null) {
                     captureVal = initialCaptureVal;
                 } else {
-                    captureVal = evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare),
-                            unsafeSquares.get(captureSquare)) + 0.1;
+                    if (controlledSquares.get(captureSquare) == null) {
+                        System.out.println("piece that can capture: " + teamPiece.getClass().toString() + " at " + square);
+                        System.out.println("capture at: " + captureSquare);
+                        System.out.println("HUHHH");
+                    }
+                    captureVal = evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare), unsafeSquares.get(captureSquare)) + 0.1;
                 }
                 teamPiece.getPossibleMoves().put(captureSquare, captureVal);
             }
@@ -263,6 +267,7 @@ public class PositionNode {
 
         double captureVal = initialCaptureVal;
         while (true) {
+
             if (opponentPiecesCopy.size() == 0) { // opponent cannot capture back
                 break;
             }
@@ -279,13 +284,13 @@ public class PositionNode {
                 break;
             }
 
-            if (opponentPiecesCopy.size() == 1
-                    || (teamPiecesCopy.get(1).getValue() <= opponentPiecesCopy.get(1).getValue())) {
+            if (opponentPiecesCopy.size() == 1 || (teamPiecesCopy.get(0).getValue() <= opponentPiecesCopy.get(1).getValue())) {
                 captureVal += opponentPiecesCopy.get(0).getValue();
                 opponentPiecesCopy.remove(0);
             } else { // team should not capture back
                 break;
             }
+
         }
 
         return captureVal;
@@ -324,11 +329,11 @@ public class PositionNode {
             ((Pawn) newTeamPieceToMove).movePawn();
             if ((newSquare - newTeamPieceToMove.getSquare()) == 2) {
                 ((Pawn) newTeamPieceToMove).moveTwoSquares();
-                int checkOpponentSquare = newTeamPieceToMove.getSquare() + Piece.LEFT;
+                int checkOpponentSquare = newSquare + Piece.LEFT;
                 if (newOpponentPieces.containsKey(checkOpponentSquare) && newOpponentPieces.get(checkOpponentSquare) instanceof Pawn) {
                     ((Pawn) newOpponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
                 }
-                checkOpponentSquare = newTeamPieceToMove.getSquare() + Piece.RIGHT;
+                checkOpponentSquare = newSquare + Piece.RIGHT;
                 if (newOpponentPieces.containsKey(checkOpponentSquare) && newOpponentPieces.get(checkOpponentSquare) instanceof Pawn) {
                     ((Pawn) newOpponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
                 }
@@ -351,7 +356,6 @@ public class PositionNode {
         }
         newTeamPieces.put(newSquare, newTeamPieceToMove);
         newTeamPieces.remove(newTeamPieceToMove.getSquare());
-        newTeamPieceToMove.setSquare(newSquare);
 
         if (newTeamPieceToMove.getCaptures() != null && newTeamPieceToMove.getCaptures().contains(newSquare)) {
             if (newOpponentPieces.containsKey(newSquare)) {
@@ -371,6 +375,8 @@ public class PositionNode {
             }
         }
 
+        newTeamPieceToMove.setSquare(newSquare);
+
         // castle
         if (newTeamPieceToMove instanceof King && ((King) newTeamPieceToMove).getPossibleCastles() != null && ((King) newTeamPieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook = null;
@@ -386,6 +392,8 @@ public class PositionNode {
                 selectedRook.setSquare(newSquare - 8);
             }
         }
+
+        newChild.clearMoves();
 
         int low = 0;
         int high = children.size() - 1;

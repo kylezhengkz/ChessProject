@@ -27,7 +27,7 @@ public class Rook extends Piece {
             if (getSkewerThreats() != null) {
                 for (SkewerTriplet skewerThreat : getSkewerThreats()) {
                     if (skewerThreat.getSkeweredPiece() instanceof King
-                    && (skewerThreat.getSkewerDirection() != delta || skewerThreat.getSkewerDirection() != -delta)) {
+                    && (skewerThreat.getSkewerDirection() != delta && skewerThreat.getSkewerDirection() != -delta)) {
                         continue outerloop;
                     }
                 }

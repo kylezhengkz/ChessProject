@@ -415,18 +415,17 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
     }
 
-    private void implementUserMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces,
-            HashMap<Integer, Piece> opponentPieces) {
+    private void implementUserMove(Piece pieceToMove, int oldSquare, int newSquare, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
         // update any statuses
         if (pieceToMove instanceof Pawn) {
             ((Pawn) pieceToMove).movePawn();
             if ((newSquare - oldSquare) == 2) {
                 ((Pawn) pieceToMove).moveTwoSquares();
-                int checkOpponentSquare = pieceToMove.getSquare() + Piece.LEFT;
+                int checkOpponentSquare = newSquare + Piece.LEFT;
                 if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
                     ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantLeft(true);
                 }
-                checkOpponentSquare = pieceToMove.getSquare() + Piece.RIGHT;
+                checkOpponentSquare = newSquare + Piece.RIGHT;
                 if (opponentPieces.containsKey(checkOpponentSquare) && opponentPieces.get(checkOpponentSquare) instanceof Pawn) {
                     ((Pawn) opponentPieces.get(checkOpponentSquare)).setEnPassantRight(true);
                 }
@@ -438,7 +437,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
         }
 
         teamPieces.put(newSquare, pieceToMove);
-        pieceToMove.setSquare(newSquare);
         teamPieces.remove(oldSquare);
         if (pieceToMove.getCaptures() != null && pieceToMove.getCaptures().contains(newSquare)) {
             if (opponentPieces.containsKey(newSquare)) {
@@ -461,9 +459,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener {
             }
         }
 
+        pieceToMove.setSquare(newSquare);
+
         // castle
         if (pieceToMove instanceof King && ((King) pieceToMove).getPossibleCastles() != null
-                && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
+        && ((King) pieceToMove).getPossibleCastles().contains(newSquare)) {
             Rook selectedRook = null;
             if (newSquare == 17 || newSquare == 24) {
                 selectedRook = (Rook) teamPieces.get(newSquare - 16);

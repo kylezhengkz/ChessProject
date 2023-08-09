@@ -69,7 +69,7 @@ public class Pawn extends Piece {
 
         int checkSquare = 0; // init
 
-        if ((legalSkewerDirection != 0 || legalSkewerDirection == UP || legalSkewerDirection != UP)) {
+        if ((legalSkewerDirection == 0 || (legalSkewerDirection == UP || legalSkewerDirection == -UP))) {
             // single square forward
             if (validMove(getSquare(), UP * directionMultiplier)) {
                 checkSquare = getSquare() + UP * directionMultiplier;
@@ -89,7 +89,7 @@ public class Pawn extends Piece {
             }
         }
 
-        if ((legalSkewerDirection == 0 || legalSkewerDirection == UP_LEFT || legalSkewerDirection == -UP_LEFT)) {
+        if ((legalSkewerDirection == 0 || (legalSkewerDirection == UP_LEFT || legalSkewerDirection == -UP_LEFT))) {
             // regular capture
             if (validMove(getSquare(), UP_LEFT * directionMultiplier)) {
                 checkSquare = getSquare() + UP_LEFT * directionMultiplier;
@@ -106,13 +106,13 @@ public class Pawn extends Piece {
 
             // en passant left
             if (enPassantLeft) {
-                addPossibleMove(checkSquare + UP_LEFT*directionMultiplier, 0);
-                addCapture(checkSquare + UP_LEFT*directionMultiplier);
+                addPossibleMove(checkSquare, 0);
+                addCapture(checkSquare);
                 setEnPassantLeft(false);
             }
         }
 
-        if ((legalSkewerDirection == 0 || legalSkewerDirection == UP_RIGHT || legalSkewerDirection == -UP_RIGHT)) {
+        if ((legalSkewerDirection == 0 || (legalSkewerDirection == UP_RIGHT || legalSkewerDirection == -UP_RIGHT))) {
             // regular capture
             if (validMove(getSquare(), UP_RIGHT * directionMultiplier)) {
                 checkSquare = getSquare() + UP_RIGHT * directionMultiplier;
@@ -129,8 +129,8 @@ public class Pawn extends Piece {
 
             // en passant right
             if (enPassantRight) {
-                addPossibleMove(checkSquare + UP_RIGHT*directionMultiplier, 0);
-                addCapture(checkSquare + UP_RIGHT*directionMultiplier);
+                addPossibleMove(checkSquare, 0);
+                addCapture(checkSquare);
                 setEnPassantRight(false);
             }
         }
