@@ -102,6 +102,7 @@ public class PositionNode {
         }
         branchNewMoves(cpuPieces, userPieces, false);
         for (PositionNode child : getChildren()) {
+            printPosition(currentPosition); 
             double eval = alphaBetaPruning(child, 2, 0, 0, true);
             if (eval < bestEval) {
                 bestPosition = child;
