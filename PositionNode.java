@@ -6,6 +6,8 @@ public class PositionNode {
     private List<PositionNode> children;
     private double moveOrderPriority;
 
+    private static int tracker = 0;
+
     PositionNode(HashMap<Integer, Piece> userPieces, HashMap<Integer, Piece> cpuPieces, double moveOrderPriority) {
         this.userPieces = userPieces;
         this.cpuPieces = cpuPieces;
@@ -92,6 +94,7 @@ public class PositionNode {
     }
 
     protected void searchCpuBestMove() {
+        tracker = 0;
         PositionNode bestPosition = null;
         double bestEval = 999;
         if (children != null) {
@@ -99,7 +102,7 @@ public class PositionNode {
         }
         branchNewMoves(cpuPieces, userPieces, false);
         for (PositionNode child : getChildren()) {
-            double eval = alphaBetaPruning(child, 1, 0, 0, true);
+            double eval = alphaBetaPruning(child, 2, 0, 0, true);
             if (eval < bestEval) {
                 bestPosition = child;
             }
@@ -114,7 +117,61 @@ public class PositionNode {
             System.out.println(square);
         }
         */
+    }
 
+    private void printPiece(Piece piece) {
+        if (piece instanceof Pawn) {
+            if (piece.getColor() == GlobalConstants.WHITE) {
+                System.out.print("P ");
+            } else {
+                System.out.print("p ");
+            }
+        } else if (piece instanceof Bishop) {
+            if (piece.getColor() == GlobalConstants.WHITE) {
+                System.out.print("B ");
+            } else {
+                System.out.print("b ");
+            }
+        } else if (piece instanceof Knight) {
+            if (piece.getColor() == GlobalConstants.WHITE) {
+                System.out.print("K ");
+            } else {
+                System.out.print("k ");
+            }
+        } else if (piece instanceof Rook) {
+            if (piece.getColor() == GlobalConstants.WHITE) {
+                System.out.print("R ");
+            } else {
+                System.out.print("r ");
+            }
+        } else if (piece instanceof Queen) {
+            if (piece.getColor() == GlobalConstants.WHITE) {
+                System.out.print("Q ");
+            } else {
+                System.out.print("q ");
+            }
+        } else if (piece instanceof King) {
+            if (piece.getColor() == GlobalConstants.WHITE) {
+                System.out.print("K ");
+            } else {
+                System.out.print("k ");
+            }
+        }
+    }
+
+    private void printPosition(PositionNode position) {
+        for (int i = 8; i >= 1; i--) {
+            for (int j = i; j <= i + 56; j+=8) {
+                if (position.getUserPieces().containsKey(j)) {
+                    printPiece(position.getUserPieces().get(j));
+                } else if (position.getCpuPieces().containsKey(j)) {
+                    printPiece(position.getCpuPieces().get(j));
+                } else {
+                    System.out.print("  ");
+                }
+            }
+            System.out.println("NEW LINE");
+        }
     }
 
     private Double alphaBetaPruning(PositionNode currentPosition, int depth, double alpha, double beta, boolean maximizingUser) {
@@ -128,11 +185,20 @@ public class PositionNode {
             }
         }
 
+        if (tracker < 1) {
+            System.out.println("CHECK PARENT POSITION");
+            printPosition(currentPosition); 
+            tracker++;
+        }
         if (maximizingUser) {
             double maxEval = -999;
             currentPosition.branchNewMoves(userPieces, cpuPieces, maximizingUser);
             for (PositionNode child : currentPosition.getChildren()) {
-                double eval = alphaBetaPruning(child, depth - 1, alpha, beta, false);
+                if (tracker <= 1) {
+                    System.out.println("CHECK CHILD POSITION");
+                    printPosition(child);
+                }
+;               double eval = alphaBetaPruning(child, depth - 1, alpha, beta, false);
                 maxEval = Math.max(maxEval, eval);
                 alpha = Math.max(alpha, eval);
                 if (beta <= alpha) {
@@ -144,6 +210,10 @@ public class PositionNode {
             double minEval = 999;
             currentPosition.branchNewMoves(cpuPieces, userPieces, maximizingUser);
             for (PositionNode child : currentPosition.getChildren()) {
+                if (tracker <= 1) {
+                    System.out.println("CHECK CHILD POSITION");
+                    printPosition(child);
+                }
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, true);
                 minEval = Math.min(minEval, eval);
                 beta = Math.min(beta, eval);
@@ -354,6 +424,7 @@ public class PositionNode {
         } else {
             newChild = new PositionNode(newOpponentPieces, newTeamPieces, moveOrderPriority);
         }
+
         newTeamPieces.put(newSquare, newTeamPieceToMove);
         newTeamPieces.remove(newTeamPieceToMove.getSquare());
 
