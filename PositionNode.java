@@ -6,8 +6,6 @@ public class PositionNode {
     private List<PositionNode> children;
     private double moveOrderPriority;
 
-    private static int tracker = 0;
-
     PositionNode(HashMap<Integer, Piece> userPieces, HashMap<Integer, Piece> cpuPieces, double moveOrderPriority) {
         this.userPieces = userPieces;
         this.cpuPieces = cpuPieces;
@@ -81,155 +79,11 @@ public class PositionNode {
         }
     }
 
-    protected void clearMoves() {
-        for (int square : cpuPieces.keySet()) {
-            Piece cpuPiece = cpuPieces.get(square);
-            cpuPiece.clear();
-        }
-
-        for (int square : userPieces.keySet()) {
-            Piece userPiece = userPieces.get(square);
-            userPiece.clear();
-        }
-    }
-
-    protected void searchCpuBestMove() {
-        tracker = 0;
-        PositionNode bestPosition = null;
-        double bestEval = 999;
-        if (children != null) {
-            children.clear();
-        }
-        branchNewMoves(cpuPieces, userPieces, false);
-        for (PositionNode child : getChildren()) {
-            printPosition(currentPosition); 
-            double eval = alphaBetaPruning(child, 2, 0, 0, true);
-            if (eval < bestEval) {
-                bestPosition = child;
-            }
-        }
-
-        setUserPieces(bestPosition.getUserPieces());
-        setCpuPieces(bestPosition.getCpuPieces());
-
-        /*
-        System.out.println("RESET");
-        for (int square : cpuPieces.keySet()) {
-            System.out.println(square);
-        }
-        */
-    }
-
-    private void printPiece(Piece piece) {
-        if (piece instanceof Pawn) {
-            if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("P ");
-            } else {
-                System.out.print("p ");
-            }
-        } else if (piece instanceof Bishop) {
-            if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("B ");
-            } else {
-                System.out.print("b ");
-            }
-        } else if (piece instanceof Knight) {
-            if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("K ");
-            } else {
-                System.out.print("k ");
-            }
-        } else if (piece instanceof Rook) {
-            if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("R ");
-            } else {
-                System.out.print("r ");
-            }
-        } else if (piece instanceof Queen) {
-            if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("Q ");
-            } else {
-                System.out.print("q ");
-            }
-        } else if (piece instanceof King) {
-            if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("K ");
-            } else {
-                System.out.print("k ");
-            }
-        }
-    }
-
-    private void printPosition(PositionNode position) {
-        for (int i = 8; i >= 1; i--) {
-            for (int j = i; j <= i + 56; j+=8) {
-                if (position.getUserPieces().containsKey(j)) {
-                    printPiece(position.getUserPieces().get(j));
-                } else if (position.getCpuPieces().containsKey(j)) {
-                    printPiece(position.getCpuPieces().get(j));
-                } else {
-                    System.out.print("  ");
-                }
-            }
-            System.out.println("NEW LINE");
-        }
-    }
-
-    private Double alphaBetaPruning(PositionNode currentPosition, int depth, double alpha, double beta, boolean maximizingUser) {
-        if (depth == 0) {
-            if (maximizingUser) {
-                double staticEval = staticEvaluation(currentPosition.getUserPieces(), currentPosition.getCpuPieces());
-                return staticEval;
-            } else {
-                double staticEval = staticEvaluation(currentPosition.getCpuPieces(), currentPosition.getUserPieces());
-                return staticEval;
-            }
-        }
-
-        if (tracker < 1) {
-            System.out.println("CHECK PARENT POSITION");
-            printPosition(currentPosition); 
-            tracker++;
-        }
-        if (maximizingUser) {
-            double maxEval = -999;
-            currentPosition.branchNewMoves(userPieces, cpuPieces, maximizingUser);
-            for (PositionNode child : currentPosition.getChildren()) {
-                if (tracker <= 1) {
-                    System.out.println("CHECK CHILD POSITION");
-                    printPosition(child);
-                }
-;               double eval = alphaBetaPruning(child, depth - 1, alpha, beta, false);
-                maxEval = Math.max(maxEval, eval);
-                alpha = Math.max(alpha, eval);
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return maxEval;
-        } else {
-            double minEval = 999;
-            currentPosition.branchNewMoves(cpuPieces, userPieces, maximizingUser);
-            for (PositionNode child : currentPosition.getChildren()) {
-                if (tracker <= 1) {
-                    System.out.println("CHECK CHILD POSITION");
-                    printPosition(child);
-                }
-                double eval = alphaBetaPruning(child, depth - 1, alpha, beta, true);
-                minEval = Math.min(minEval, eval);
-                beta = Math.min(beta, eval);
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return minEval;
-        }
-    }
-
-    protected void branchNewMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean maximizingUser) {
+    protected void branchNewMoves(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean cpuTurn) {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
+        // identify all possible moves and controlled squares
         for (int square : opponentPieces.keySet()) {
             Piece opponentPiece = opponentPieces.get(square);
             if (opponentPiece instanceof Pawn) {
@@ -248,6 +102,8 @@ public class PositionNode {
         }
 
         King teamKing = null; // init
+
+        // identify all possible moves and controlled squares
         for (int square : teamPieces.keySet()) {
             Piece teamPiece = teamPieces.get(square);
 
@@ -267,6 +123,7 @@ public class PositionNode {
             }
         }
 
+        // check for castling
         if (teamKing != null && !unsafeSquares.containsKey(teamKing.getSquare())) {
             teamKing.checkCastle(teamPieces, opponentPieces, unsafeSquares);
         }
@@ -303,7 +160,7 @@ public class PositionNode {
                         System.out.println("capture at: " + captureSquare);
                         System.out.println("HUHHH");
                     }
-                    captureVal = evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare), unsafeSquares.get(captureSquare)) + 0.1;
+                    captureVal = Evaluation.evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare), unsafeSquares.get(captureSquare)) + 0.1;
                 }
                 teamPiece.getPossibleMoves().put(captureSquare, captureVal);
             }
@@ -318,84 +175,23 @@ public class PositionNode {
         // subtract moves for pinned pieces (except if it leads to a check)
 
         // add children nodes
-
         for (Piece teamPiece : teamPieces.values()) {
             if (teamPiece.getPossibleMoves() == null) {
                 continue;
             }
-
             for (int newSquare : teamPiece.getPossibleMoves().keySet()) {
                 double moveVal = teamPiece.getPossibleMoves().get(newSquare);
-                addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces, maximizingUser);
+                addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces, cpuTurn);
             }
         }
-
     }
 
-    private Double evaluateTrade(int tradingSquare, double initialCaptureVal, List<Piece> teamPieces, List<Piece> opponentPieces) {
-        List<Piece> teamPiecesCopy = new ArrayList<>(teamPieces);
-        List<Piece> opponentPiecesCopy = new ArrayList<>(opponentPieces);
-
-        double captureVal = initialCaptureVal;
-        while (true) {
-
-            if (opponentPiecesCopy.size() == 0) { // opponent cannot capture back
-                break;
-            }
-
-            if (teamPiecesCopy.size() == 1) { // final capture
-                captureVal -= teamPiecesCopy.get(0).getValue();
-                break;
-            }
-
-            if (opponentPiecesCopy.get(0).getValue() <= teamPiecesCopy.get(1).getValue()) {
-                captureVal -= teamPiecesCopy.get(0).getValue();
-                teamPiecesCopy.remove(0);
-            } else { // opponent should not capture back
-                break;
-            }
-
-            if (opponentPiecesCopy.size() == 1 || (teamPiecesCopy.get(0).getValue() <= opponentPiecesCopy.get(1).getValue())) {
-                captureVal += opponentPiecesCopy.get(0).getValue();
-                opponentPiecesCopy.remove(0);
-            } else { // team should not capture back
-                break;
-            }
-
-        }
-
-        return captureVal;
-    }
-
-    private Double staticEvaluation(HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces) {
-        double staticEval = 0;
-        for (Piece teamPiece : teamPieces.values()) {
-            staticEval += teamPiece.getValue();
-        }
-
-        for (Piece opponentPiece : opponentPieces.values()) {
-            staticEval -= opponentPiece.getValue();
-        }
-
-        return staticEval;
-    }
-
-    private HashMap<Integer, Piece> deepCopyPieces(HashMap<Integer, Piece> pieces) {
-        HashMap<Integer, Piece> newPieces = new HashMap<>();
-        for (Map.Entry<Integer, Piece> entry : pieces.entrySet()) {
-            int key = entry.getKey();
-            Piece originalPiece = entry.getValue();
-            Piece newPiece = originalPiece.clone();
-            newPieces.put(key, newPiece);
-        }
-        return newPieces;
-    }
-
-    private void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean maximizingUser) {
+    private void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean cpuTurn) {
         Piece newTeamPieceToMove = teamPieceToMove.clone();
         HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
         HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
 
+        // update statuses
         if (newTeamPieceToMove instanceof Pawn) {
             ((Pawn) newTeamPieceToMove).movePawn();
             if ((newSquare - newTeamPieceToMove.getSquare()) == 2) {
@@ -420,10 +216,10 @@ public class PositionNode {
         }
 
         PositionNode newChild = null;
-        if (maximizingUser) {
-            newChild = new PositionNode(newTeamPieces, newOpponentPieces, moveOrderPriority);
-        } else {
+        if (cpuTurn) {
             newChild = new PositionNode(newOpponentPieces, newTeamPieces, moveOrderPriority);
+        } else {
+            newChild = new PositionNode(newTeamPieces, newOpponentPieces, moveOrderPriority);
         }
 
         newTeamPieces.put(newSquare, newTeamPieceToMove);
@@ -487,6 +283,29 @@ public class PositionNode {
         if (!inserted) {
             children.add(low, newChild);
         }
+    }
+
+    protected void clearMoves() {
+        for (int square : cpuPieces.keySet()) {
+            Piece cpuPiece = cpuPieces.get(square);
+            cpuPiece.clear();
+        }
+
+        for (int square : userPieces.keySet()) {
+            Piece userPiece = userPieces.get(square);
+            userPiece.clear();
+        }
+    }
+
+    private HashMap<Integer, Piece> deepCopyPieces(HashMap<Integer, Piece> pieces) {
+        HashMap<Integer, Piece> newPieces = new HashMap<>();
+        for (Map.Entry<Integer, Piece> entry : pieces.entrySet()) {
+            int key = entry.getKey();
+            Piece originalPiece = entry.getValue();
+            Piece newPiece = originalPiece.clone();
+            newPieces.put(key, newPiece);
+        }
+        return newPieces;
     }
 
 }
