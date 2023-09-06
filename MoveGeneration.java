@@ -5,12 +5,15 @@ public class MoveGeneration {
 
     public static PositionNode searchCpuBestMove(PositionNode position) {
         PositionNode bestPosition = null;
-        double bestEval = 999;
+        double bestEval = -999;
 
+        if (position.getChildren() != null) {
+            position.getChildren().clear();
+        }
         branchNewMoves(position, true, true);
         for (PositionNode child : position.getChildren()) {
-            double eval = alphaBetaPruning(child, 2, 0, 0, true);
-            if (eval < bestEval) {
+            double eval = alphaBetaPruning(child, 3, -999, 999, true);
+            if (eval > bestEval) {
                 bestPosition = child;
                 bestEval = eval;
             }
@@ -21,10 +24,14 @@ public class MoveGeneration {
     private static Double alphaBetaPruning(PositionNode position, int depth, double alpha, double beta, boolean cpuTurn) {
         if (depth == 0) {
             if (cpuTurn) {
-                double staticEval = Evaluation.staticEvaluation(position, true); // NEGATIVE
+                double staticEval = Evaluation.staticEvaluation(position, true); // POSITIVE
+                System.out.println(staticEval);
+                DebugPrint.printPosition(position);
                 return staticEval;
             } else {
-                double staticEval = Evaluation.staticEvaluation(position, false); // POSITIVE
+                double staticEval = Evaluation.staticEvaluation(position, false); // NEGATIVE
+                System.out.println(staticEval);
+                DebugPrint.printPosition(position);
                 return staticEval;
             }
         }
@@ -127,15 +134,15 @@ public class MoveGeneration {
                 if (opponentPieces.containsKey(captureSquare)) {
                     initialCaptureVal = opponentPieces.get(captureSquare).getValue();
                 } else {
-                    int diff = Math.abs(captureSquare - square);
+                    int diff = captureSquare - square;
                     int directionMultiplier = 1;
                     if (diff < 0) {
                         directionMultiplier = -1;
                     }
 
-                    if (diff == 7) {
+                    if (Math.abs(diff) == 7) {
                         initialCaptureVal = opponentPieces.get(captureSquare + directionMultiplier).getValue();
-                    } else if (diff == 9) {
+                    } else if (Math.abs(diff) == 9) {
                         initialCaptureVal = opponentPieces.get(captureSquare - directionMultiplier).getValue();
                     }
                 }
@@ -148,7 +155,6 @@ public class MoveGeneration {
                         System.out.println("capture at: " + captureSquare);
                         System.out.println("HUHHH");
                     }
-                    captureVal = Evaluation.evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare), unsafeSquares.get(captureSquare)) + 0.1;
                 }
                 teamPiece.getPossibleMoves().put(captureSquare, captureVal);
             }

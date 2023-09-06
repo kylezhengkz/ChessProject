@@ -176,6 +176,7 @@ public class PositionNode {
         if (!inserted) {
             children.add(low, newChild);
         }
+
     }
 
     protected void clearMoves() {

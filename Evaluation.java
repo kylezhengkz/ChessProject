@@ -6,17 +6,17 @@ public class Evaluation {
         double staticEval = 0;
         if (cpuTurn) {
             for (Piece cpuPiece : position.getCpuPieces().values()) {
-                staticEval -= cpuPiece.getValue();
-            }
-            for (Piece opponentPiece : position.getUserPieces().values()) {
-                staticEval += opponentPiece.getValue();
-            }
-        } else {
-            for (Piece cpuPiece : position.getCpuPieces().values()) {
                 staticEval += cpuPiece.getValue();
             }
             for (Piece opponentPiece : position.getUserPieces().values()) {
                 staticEval -= opponentPiece.getValue();
+            }
+        } else {
+            for (Piece cpuPiece : position.getCpuPieces().values()) {
+                staticEval -= cpuPiece.getValue();
+            }
+            for (Piece opponentPiece : position.getUserPieces().values()) {
+                staticEval += opponentPiece.getValue();
             }
         }
         return staticEval;
