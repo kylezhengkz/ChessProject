@@ -1,24 +1,20 @@
+import java.util.HashMap;
+import java.util.List;
+
 public class MoveGeneration {
 
     public static PositionNode searchCpuBestMove(PositionNode position) {
-        System.out.println("BEFORE CPU SEARCH:");
-        DebugPrint.printPosition(position);
         PositionNode bestPosition = null;
         double bestEval = 999;
 
-        position.branchNewMoves(position.getCpuPieces(),position.getUserPieces(), true);
+        branchNewMoves(position, true, true);
         for (PositionNode child : position.getChildren()) {
-            System.out.println("CONSIDER CHILD:");
-            DebugPrint.printPosition(child);
             double eval = alphaBetaPruning(child, 2, 0, 0, true);
             if (eval < bestEval) {
                 bestPosition = child;
                 bestEval = eval;
             }
         }
-
-        System.out.println("AFTER CPU SEARCH:");
-        DebugPrint.printPosition(bestPosition);
         return bestPosition;
     }
 
@@ -35,7 +31,7 @@ public class MoveGeneration {
 
         if (cpuTurn) {
             double maxEval = -999;
-            position.branchNewMoves(position.getCpuPieces(), position.getUserPieces(), true);
+            branchNewMoves(position, true, false);
             for (PositionNode child : position.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, false);
                 maxEval = Math.max(maxEval, eval);
@@ -47,7 +43,7 @@ public class MoveGeneration {
             return maxEval;
         } else {
             double minEval = 999;
-            position.branchNewMoves(position.getUserPieces(), position.getCpuPieces(), false);
+            branchNewMoves(position, false, false);
             for (PositionNode child : position.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, true);
                 minEval = Math.min(minEval, eval);
@@ -57,6 +53,124 @@ public class MoveGeneration {
                 }
             }
             return minEval;
+        }
+    }
+
+    private static void branchNewMoves(PositionNode position, boolean cpuTurn, boolean initial) {
+        HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
+        HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
+
+        HashMap<Integer, Piece> teamPieces;
+        HashMap<Integer, Piece> opponentPieces;
+
+        if (cpuTurn) {
+            teamPieces = position.getCpuPieces();
+            opponentPieces = position.getUserPieces();
+        } else {
+            teamPieces = position.getUserPieces();
+            opponentPieces = position.getCpuPieces();
+        }
+
+        // identify all possible moves and controlled squares
+        for (int square : opponentPieces.keySet()) {
+            Piece opponentPiece = opponentPieces.get(square);
+            if (opponentPiece instanceof Pawn) {
+                ((Pawn) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Knight) {
+                ((Knight) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Bishop) {
+                ((Bishop) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Rook) {
+                ((Rook) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof Queen) {
+                ((Queen) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares);
+            } else if (opponentPiece instanceof King) {
+                ((King) opponentPiece).generateMoves(opponentPieces, teamPieces, unsafeSquares, controlledSquares);
+            }
+        }
+
+        King teamKing = null; // init
+
+        // identify all possible moves and controlled squares
+        for (int square : teamPieces.keySet()) {
+            Piece teamPiece = teamPieces.get(square);
+
+            if (teamPiece instanceof Pawn) {
+                ((Pawn) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Knight) {
+                ((Knight) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Bishop) {
+                ((Bishop) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Rook) {
+                ((Rook) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof Queen) {
+                ((Queen) teamPiece).generateMoves(teamPieces, opponentPieces, controlledSquares);
+            } else if (teamPiece instanceof King) {
+                teamKing = (King) teamPiece;
+                teamKing.generateMoves(teamPieces, opponentPieces, controlledSquares, unsafeSquares);
+            }
+        }
+
+        // check for castling
+        if (teamKing != null && !unsafeSquares.containsKey(teamKing.getSquare())) {
+            teamKing.checkCastle(teamPieces, opponentPieces, unsafeSquares);
+        }
+
+        // evaluate captures
+        for (int square : teamPieces.keySet()) {
+            Piece teamPiece = teamPieces.get(square);
+            if (teamPiece.getCaptures() == null) {
+                continue;
+            }
+            for (int captureSquare : teamPiece.getCaptures()) {
+                double initialCaptureVal = 0;
+                if (opponentPieces.containsKey(captureSquare)) {
+                    initialCaptureVal = opponentPieces.get(captureSquare).getValue();
+                } else {
+                    int diff = Math.abs(captureSquare - square);
+                    int directionMultiplier = 1;
+                    if (diff < 0) {
+                        directionMultiplier = -1;
+                    }
+
+                    if (diff == 7) {
+                        initialCaptureVal = opponentPieces.get(captureSquare + directionMultiplier).getValue();
+                    } else if (diff == 9) {
+                        initialCaptureVal = opponentPieces.get(captureSquare - directionMultiplier).getValue();
+                    }
+                }
+                double captureVal = 0;
+                if (unsafeSquares.get(captureSquare) == null) {
+                    captureVal = initialCaptureVal;
+                } else {
+                    if (controlledSquares.get(captureSquare) == null) {
+                        System.out.println("piece that can capture: " + teamPiece.getClass().toString() + " at " + square);
+                        System.out.println("capture at: " + captureSquare);
+                        System.out.println("HUHHH");
+                    }
+                    captureVal = Evaluation.evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare), unsafeSquares.get(captureSquare)) + 0.1;
+                }
+                teamPiece.getPossibleMoves().put(captureSquare, captureVal);
+            }
+        }
+
+        // short range and long range attacks
+
+        // unsafe piece evasions
+
+        // defend unsafe pieces
+
+        // subtract moves for pinned pieces (except if it leads to a check)
+
+        // add children nodes
+        for (Piece teamPiece : teamPieces.values()) {
+            if (teamPiece.getPossibleMoves() == null) {
+                continue;
+            }
+            for (int newSquare : teamPiece.getPossibleMoves().keySet()) {
+                double moveVal = teamPiece.getPossibleMoves().get(newSquare);
+                position.addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces, cpuTurn, initial);
+            }
         }
     }
     
