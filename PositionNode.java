@@ -79,7 +79,7 @@ public class PositionNode {
         }
     }
 
-    protected void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean cpuTurn, boolean initial) {
+    protected void addChild(Piece teamPieceToMove, int newSquare, double moveOrderPriority, HashMap<Integer, Piece> teamPieces, HashMap<Integer, Piece> opponentPieces, boolean cpuTurn) {
         Piece newTeamPieceToMove = teamPieceToMove.clone();
         HashMap<Integer, Piece> newTeamPieces = deepCopyPieces(teamPieces);
         HashMap<Integer, Piece> newOpponentPieces = deepCopyPieces(opponentPieces);
@@ -155,7 +155,6 @@ public class PositionNode {
         }
 
         newChild.clearMoves();
-
         int low = 0;
         int high = children.size() - 1;
         boolean inserted = false;

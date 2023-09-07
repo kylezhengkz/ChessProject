@@ -2,9 +2,9 @@ import java.util.*;
 
 public class Evaluation {
 
-    public static Double staticEvaluation(PositionNode position, boolean cpuTurn) {
+    public static Double staticEvaluation(PositionNode position, boolean cpuPerspective) {
         double staticEval = 0;
-        if (cpuTurn) {
+        if (cpuPerspective) {
             for (Piece cpuPiece : position.getCpuPieces().values()) {
                 staticEval += cpuPiece.getValue();
             }

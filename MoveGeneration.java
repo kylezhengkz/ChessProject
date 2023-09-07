@@ -10,7 +10,7 @@ public class MoveGeneration {
         if (position.getChildren() != null) {
             position.getChildren().clear();
         }
-        branchNewMoves(position, true, true);
+        branchNewMoves(position, true);
         for (PositionNode child : position.getChildren()) {
             double eval = alphaBetaPruning(child, 3, -999, 999, true);
             if (eval > bestEval) {
@@ -23,22 +23,13 @@ public class MoveGeneration {
 
     private static Double alphaBetaPruning(PositionNode position, int depth, double alpha, double beta, boolean cpuTurn) {
         if (depth == 0) {
-            if (cpuTurn) {
-                double staticEval = Evaluation.staticEvaluation(position, true); // POSITIVE
-                System.out.println(staticEval);
-                DebugPrint.printPosition(position);
-                return staticEval;
-            } else {
-                double staticEval = Evaluation.staticEvaluation(position, false); // NEGATIVE
-                System.out.println(staticEval);
-                DebugPrint.printPosition(position);
-                return staticEval;
-            }
+            double staticEval = Evaluation.staticEvaluation(position, true);
+            return staticEval;
         }
 
         if (cpuTurn) {
             double maxEval = -999;
-            branchNewMoves(position, true, false);
+            branchNewMoves(position, true);
             for (PositionNode child : position.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, false);
                 maxEval = Math.max(maxEval, eval);
@@ -50,7 +41,7 @@ public class MoveGeneration {
             return maxEval;
         } else {
             double minEval = 999;
-            branchNewMoves(position, false, false);
+            branchNewMoves(position, false);
             for (PositionNode child : position.getChildren()) {
                 double eval = alphaBetaPruning(child, depth - 1, alpha, beta, true);
                 minEval = Math.min(minEval, eval);
@@ -63,7 +54,7 @@ public class MoveGeneration {
         }
     }
 
-    private static void branchNewMoves(PositionNode position, boolean cpuTurn, boolean initial) {
+    private static void branchNewMoves(PositionNode position, boolean cpuTurn) {
         HashMap<Integer, List<Piece>> unsafeSquares = new HashMap<>();
         HashMap<Integer, List<Piece>> controlledSquares = new HashMap<>();
 
@@ -150,11 +141,8 @@ public class MoveGeneration {
                 if (unsafeSquares.get(captureSquare) == null) {
                     captureVal = initialCaptureVal;
                 } else {
-                    if (controlledSquares.get(captureSquare) == null) {
-                        System.out.println("piece that can capture: " + teamPiece.getClass().toString() + " at " + square);
-                        System.out.println("capture at: " + captureSquare);
-                        System.out.println("HUHHH");
-                    }
+                    // if (controlledSquares.get(captureSquare) == null) // BUG
+                    captureVal = Evaluation.evaluateTrade(captureSquare, initialCaptureVal, controlledSquares.get(captureSquare), unsafeSquares.get(captureSquare)) + 0.1;
                 }
                 teamPiece.getPossibleMoves().put(captureSquare, captureVal);
             }
@@ -175,7 +163,7 @@ public class MoveGeneration {
             }
             for (int newSquare : teamPiece.getPossibleMoves().keySet()) {
                 double moveVal = teamPiece.getPossibleMoves().get(newSquare);
-                position.addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces, cpuTurn, initial);
+                position.addChild(teamPiece, newSquare, moveVal, teamPieces, opponentPieces, cpuTurn);
             }
         }
     }
