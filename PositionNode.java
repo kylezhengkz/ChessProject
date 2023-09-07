@@ -182,11 +182,17 @@ public class PositionNode {
         for (int square : cpuPieces.keySet()) {
             Piece cpuPiece = cpuPieces.get(square);
             cpuPiece.clear();
+            if (cpuPiece instanceof King && ((King) cpuPiece).getPossibleCastles() != null) {
+                ((King) cpuPiece).getPossibleCastles().clear();
+            }
         }
 
         for (int square : userPieces.keySet()) {
             Piece userPiece = userPieces.get(square);
             userPiece.clear();
+            if (userPiece instanceof King && ((King) userPiece).getPossibleCastles() != null) {
+                ((King) userPiece).getPossibleCastles().clear();
+            }
         }
     }
 

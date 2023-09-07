@@ -25,7 +25,7 @@ public class King extends Piece {
         return stationaryStatus;
     }
 
-    void moveKing() {
+    protected void moveKing() {
         stationaryStatus = false;
     }
 

@@ -12,7 +12,7 @@ public class MoveGeneration {
         }
         branchNewMoves(position, true);
         for (PositionNode child : position.getChildren()) {
-            double eval = alphaBetaPruning(child, 3, -999, 999, true);
+            double eval = alphaBetaPruning(child, 3, -999, 999, false);
             if (eval > bestEval) {
                 bestPosition = child;
                 bestEval = eval;
@@ -110,7 +110,7 @@ public class MoveGeneration {
         }
 
         // check for castling
-        if (teamKing != null && !unsafeSquares.containsKey(teamKing.getSquare())) {
+        if (teamKing != null) {
             teamKing.checkCastle(teamPieces, opponentPieces, unsafeSquares);
         }
 

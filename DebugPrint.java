@@ -35,9 +35,9 @@ public class DebugPrint {
             }
         } else if (piece instanceof King) {
             if (piece.getColor() == GlobalConstants.WHITE) {
-                System.out.print("K ");
+                System.out.print("Z ");
             } else {
-                System.out.print("k ");
+                System.out.print("z ");
             }
         }
     }
