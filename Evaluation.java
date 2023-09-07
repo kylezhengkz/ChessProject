@@ -35,17 +35,20 @@ public class Evaluation {
 
             if (teamPiecesCopy.size() == 1) { // final capture
                 captureVal -= teamPiecesCopy.get(0).getValue();
+                teamPiecesCopy.remove(0);
                 break;
-            }
-
-            if (opponentPiecesCopy.get(0).getValue() <= teamPiecesCopy.get(1).getValue()) {
+            } else if (opponentPiecesCopy.get(0).getValue() <= teamPiecesCopy.get(1).getValue() && opponentPiecesCopy.size() > 1) {
                 captureVal -= teamPiecesCopy.get(0).getValue();
                 teamPiecesCopy.remove(0);
             } else { // opponent should not capture back
                 break;
             }
 
-            if (opponentPiecesCopy.size() == 1 || (teamPiecesCopy.get(0).getValue() <= opponentPiecesCopy.get(1).getValue())) {
+            if (opponentPiecesCopy.size() == 1) {
+                captureVal += opponentPiecesCopy.get(0).getValue();
+                opponentPiecesCopy.remove(0);
+                break;
+            } else if (teamPiecesCopy.get(0).getValue() <= opponentPiecesCopy.get(1).getValue() && teamPiecesCopy.size() > 1) {
                 captureVal += opponentPiecesCopy.get(0).getValue();
                 opponentPiecesCopy.remove(0);
             } else { // team should not capture back
