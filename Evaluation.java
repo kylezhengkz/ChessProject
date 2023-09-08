@@ -2,6 +2,9 @@ import java.util.*;
 
 public class Evaluation {
 
+    public static Map<Integer, Double> squareValues = new HashMap<>();
+    public static Map<Integer, Double> pawnPosVal = new HashMap<>();
+
     public static Double staticEvaluation(PositionNode position, boolean cpuPerspective) {
         double staticEval = 0;
         if (cpuPerspective) {

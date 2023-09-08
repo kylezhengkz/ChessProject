@@ -3,8 +3,25 @@ import java.util.*;
 public class StartGame {
 
     public static void main(String[] args) {
+        mapValues();
         MenuScreen menuScreen = new MenuScreen();
         menuScreen.setVisible(true);
+    }
+
+    private static void mapValues() {
+        for (int i = 1; i <= 32; i++) {
+            double val = (i - 1)/8 * 0.02;
+            Evaluation.squareValues.put(i, val);
+        }
+        for (int i = 64; i >= 33; i--) {
+            double val = 0.08 - (i - 1)/8 * 0.02;
+            Evaluation.squareValues.put(i, val);
+        }
+        for (int i = 1; i >= 64; i++) {
+            double val;
+            val = 0.0004*(i % 8);
+            Evaluation.pawnPosVal.put(i, val);
+        }
     }
 
     public static PositionNode initStartingPosition(int color) {
